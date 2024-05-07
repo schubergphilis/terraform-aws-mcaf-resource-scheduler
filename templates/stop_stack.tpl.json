@@ -1,0 +1,5 @@
+{
+    "Comment": "State machine to stop stack ${stack_name}",
+    "StartAt": "Step1",
+    "States": ${states}
+}
