@@ -1,4 +1,5 @@
 from datetime import datetime, UTC, timedelta
+from zoneinfo import ZoneInfo
 from scheduler.aws_cron.awscron import AWSCron
 
 from typing import Tuple
@@ -26,7 +27,11 @@ def window_expression_to_cron_expressions(
 
 
 def extend_windows(
-    aws_window_expression: str, minutes: int, start_stack_at: str, stop_stack_at: str
+    aws_window_expression: str,
+    minutes: int,
+    start_stack_at: str,
+    stop_stack_at: str,
+    timezone: str,
 ) -> Tuple[str, str, bool, bool]:
     now = datetime.now(UTC)
 
@@ -64,6 +69,14 @@ def extend_windows(
 
         cron_stack_stop = AWSCron(stop_stack_at)
         date_stack_stop = cron_stack_stop.occurrence(now).next()
+
+        if timezone != "UTC":
+            date_stack_start = date_stack_start.replace(
+                tzinfo=ZoneInfo(timezone)
+            ).astimezone(tz=ZoneInfo("UTC"))
+            date_stack_stop = date_stack_stop.replace(
+                tzinfo=ZoneInfo(timezone)
+            ).astimezone(tz=ZoneInfo("UTC"))
 
         extended_start_comp = int(extended_start.strftime("%H%M"))
         extended_stop_comp = int(extended_stop.strftime("%H%M"))

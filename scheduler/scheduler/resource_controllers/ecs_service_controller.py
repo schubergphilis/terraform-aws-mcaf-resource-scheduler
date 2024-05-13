@@ -1,4 +1,5 @@
 import boto3
+from typing import Tuple
 
 from scheduler.resource_controller import ResourceController
 
@@ -12,12 +13,12 @@ class EcsServiceController(ResourceController):
         self.name = name
         self.desired = int(desired)
 
-    def start(self):
+    def start(self) -> Tuple[bool, str]:
         ecs.update_service(
             cluster=self.cluster_name, service=self.name, desiredCount=self.desired
         )
-        self.logger.info(f"Service {self.name} started successfully")
+        return (True, f"Service {self.name} started successfully")
 
-    def stop(self):
+    def stop(self) -> Tuple[bool, str]:
         ecs.update_service(cluster=self.cluster_name, service=self.name, desiredCount=0)
-        self.logger.info(f"Service {self.name} stopped successfully")
+        return (True, f"Service {self.name} stopped successfully")

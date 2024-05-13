@@ -15,7 +15,8 @@ module "scheduler_lambda" {
   version = "~> 1.1.2"
 
   #checkov:skip=CKV_AWS_338:Ensure CloudWatch log groups retains logs for at least 1 year
-  filename = data.archive_file.scheduler_source.output_path
+  filename         = data.archive_file.scheduler_source.output_path
+  source_code_hash = data.archive_file.scheduler_source.output_base64sha256
 
   name          = "stack-scheduler-${var.stack_name}"
   create_policy = false
@@ -34,7 +35,7 @@ module "scheduler_lambda" {
     POWERTOOLS_SERVICE_NAME = "stack-scheduler-${var.stack_name}"
   }
 
-  # Use a AWS provided layer to include Powertools to simplify the redistribution process.
+  # Use a AWS provided layer to include Powertools to simplify redistribution.
   # Also see https://docs.powertools.aws.dev/lambda/python/latest/#lambda-layer.
   layers = [
     "arn:aws:lambda:${data.aws_region.current.name}:017000801446:layer:AWSLambdaPowertoolsPythonV2:58"

@@ -76,6 +76,23 @@ data "aws_iam_policy_document" "lambda_policy" {
   }
 
   dynamic "statement" {
+    for_each = contains(local.resource_types_in_composition, "ec2_instance") ? toset(["ec2_instance"]) : toset([])
+
+    content {
+      effect = "Allow"
+      actions = [
+        "ec2:StartInstances",
+        "ec2:StopInstances"
+      ]
+      resources = [
+        for resource in var.resource_composition :
+        "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:instance/${resource.params["id"]}"
+        if resource.type == "ec2_instance"
+      ]
+    }
+  }
+
+  dynamic "statement" {
     for_each = contains(local.resource_types_in_composition, "auto_scaling_group") ? toset(["auto_scaling_group"]) : toset([])
 
     content {
@@ -189,5 +206,34 @@ module "step_functions_role" {
   principal_type        = "Service"
   principal_identifiers = ["states.amazonaws.com"]
   role_policy           = data.aws_iam_policy_document.step_functions_policy.json
+  tags                  = var.tags
+}
+
+data "aws_iam_policy_document" "api_gateway_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "states:StartExecution",
+      "states:StopExecution"
+    ]
+    resources = [
+      aws_sfn_state_machine.stack_start.arn,
+      aws_sfn_state_machine.stack_stop.arn,
+      "${aws_sfn_state_machine.stack_start.arn}:*",
+      "${aws_sfn_state_machine.stack_stop.arn}:*",
+    ]
+  }
+}
+
+module "api_gateway_role" {
+  count  = var.webhooks.deploy ? 1 : 0
+  source = "github.com/schubergphilis/terraform-aws-mcaf-role?ref=v0.3.3"
+
+  name                  = "stack-scheduler-api-gateway-role-${var.stack_name}-${data.aws_region.current.name}"
+  create_policy         = true
+  postfix               = false
+  principal_type        = "Service"
+  principal_identifiers = ["apigateway.amazonaws.com"]
+  role_policy           = data.aws_iam_policy_document.api_gateway_policy.json
   tags                  = var.tags
 }

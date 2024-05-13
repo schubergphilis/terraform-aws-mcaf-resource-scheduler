@@ -13,7 +13,8 @@ def test_scheduler_cron_helper_extend_windows(lambda_context):
             "aws_window_expression" :"Thu:00:00-Thu:02:00",
             "minutes": 15,
             "start_stack_at": "0 9 ? * * *",
-            "stop_stack_at": "0 18 ? * * *"
+            "stop_stack_at": "0 18 ? * * *",
+            "timezone": "Europe/Amsterdam"
         }
     }
 
@@ -47,6 +48,30 @@ def test_scheduler_ecs_service_stop(lambda_context):
             "cluster_name" :"ecs-cluster-foo",
             "name": "bar-service",
             "desired": "3"
+        }
+    }
+
+    with pytest.raises(NoCredentialsError):
+        handler(payload, lambda_context)
+
+def test_scheduler_ec2_instance_start(lambda_context):
+    payload = {
+        "resource_type": "ec2_instance",
+        "action": "start",
+        "ec2_instance_params": {
+            "id" :"i-4abc123"
+        }
+    }
+
+    with pytest.raises(NoCredentialsError):
+        handler(payload, lambda_context)
+
+def test_scheduler_ec2_instance_stop(lambda_context):
+    payload = {
+        "resource_type": "ec2_instance",
+        "action": "stop",
+        "ec2_instance_params": {
+            "id" :"i-4abc123"
         }
     }
 

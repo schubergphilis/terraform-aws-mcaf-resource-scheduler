@@ -14,6 +14,7 @@ INPUT = {
                 "rds_instance",
                 "rds_cluster",
                 "auto_scaling_group",
+                "ec2_instance",
                 "ecs_service",
                 "redshift_cluster",
                 "cron_helper",
@@ -26,6 +27,7 @@ INPUT = {
                 "minutes": {"type": "number"},
                 "start_stack_at": {"type": "string"},
                 "stop_stack_at": {"type": "string"},
+                "timezone": {"type": "string"},
             },
             "required": ["aws_window_expression", "minutes"],
         },
@@ -40,6 +42,11 @@ INPUT = {
             "required": ["id"],
         },
         "redshift_cluster_params": {
+            "type": "object",
+            "properties": {"id": {"type": "string"}},
+            "required": ["id"],
+        },
+        "ec2_instance_params": {
             "type": "object",
             "properties": {"id": {"type": "string"}},
             "required": ["id"],
@@ -91,6 +98,10 @@ INPUT = {
         {
             "if": {"properties": {"resource_type": {"const": "ecs_service"}}},
             "then": {"required": ["ecs_service_params"]},
+        },
+        {
+            "if": {"properties": {"resource_type": {"const": "ec2_instance"}}},
+            "then": {"required": ["ec2_instance_params"]},
         },
     ],
 }

@@ -11,23 +11,23 @@ variable "resource_composition" {
   description = "Resource composition"
 
   validation {
-    condition     = length([for r in var.resource_composition : r if contains(["rds_instance", "rds_cluster", "auto_scaling_group", "ecs_service", "redshift_cluster", "wait"], r.type)]) == length(var.resource_composition)
-    error_message = "Resource type must be one of rds_instance, rds_cluster, auto_scaling_group, ecs_service or redshift_cluster"
+    condition     = length([for r in var.resource_composition : r if contains(["ec2_instance", "rds_instance", "rds_cluster", "auto_scaling_group", "ecs_service", "redshift_cluster", "wait"], r.type)]) == length(var.resource_composition)
+    error_message = "Resource type must be one of ec2_instance, rds_instance, rds_cluster, auto_scaling_group, ecs_service or redshift_cluster"
   }
 }
 
-variable "self_service_configuration" {
+variable "webhooks" {
   type = object({
-    enabled = bool
-    private = bool
+    deploy       = bool
+    ip_whitelist = list(string)
+    private      = optional(bool, false)
   })
-
   default = {
-    enabled = false
-    private = true
+    deploy       = false
+    ip_whitelist = []
+    private      = false
   }
-
-  description = "Self-service portal configuration"
+  description = "Deploy webhooks for external triggers"
 }
 
 variable "stack_name" {
@@ -37,7 +37,7 @@ variable "stack_name" {
 
 variable "start_stack_at" {
   type        = string
-  description = "Stack start expression"
+  description = "Stack start cron expression in selected timezone"
 
   validation {
     condition     = var.start_stack_at == "on-demand" || length(split(" ", var.start_stack_at)) == 6
@@ -47,7 +47,7 @@ variable "start_stack_at" {
 
 variable "stop_stack_at" {
   type        = string
-  description = "Stack stop expression"
+  description = "Stack stop cron expression in selected timezone"
 
   validation {
     condition     = var.stop_stack_at == "on-demand" || length(split(" ", var.stop_stack_at)) == 6
@@ -64,5 +64,5 @@ variable "tags" {
 variable "timezone" {
   type        = string
   description = "Timezone to execute schedules in"
-  default     = "Europe/Amsterdam"
+  default     = "UTC"
 }

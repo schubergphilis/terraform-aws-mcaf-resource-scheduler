@@ -1,4 +1,5 @@
 import boto3
+from typing import Tuple
 
 from scheduler.resource_controller import ResourceController
 
@@ -13,17 +14,17 @@ class AutoscalingGroupController(ResourceController):
         self.max = int(max)
         self.desired = int(desired)
 
-    def start(self):
+    def start(self) -> Tuple[bool, str]:
         autoscaling.update_auto_scaling_group(
             AutoScalingGroupName=self.name,
             MinSize=self.min,
             MaxSize=self.max,
             DesiredCapacity=self.desired,
         )
-        self.logger.info(f"Auto-Scaling Group {self.name} started successfully")
+        return (True, f"Auto-Scaling Group {self.name} started successfully")
 
-    def stop(self):
+    def stop(self) -> Tuple[bool, str]:
         autoscaling.update_auto_scaling_group(
             AutoScalingGroupName=self.name, MinSize=0, MaxSize=0, DesiredCapacity=0
         )
-        self.logger.info(f"Auto-Scaling Group {self.name} stopped successfully")
+        return (True, f"Auto-Scaling Group {self.name} stopped successfully")

@@ -1,4 +1,6 @@
 locals {
+  stack_state_done = { "Done" : { "Type" : "Succeed" } }
+
   start_stack_states_resources = {
     for index, resource in var.resource_composition : "Step${index + 1}" => [{
       "Type" : "Wait",
@@ -16,12 +18,7 @@ locals {
     }][resource.type == "wait" ? 0 : 1]
   }
 
-  start_stack_states = merge(
-    {
-      "Done" : { "Type" : "Succeed" }
-    },
-    local.start_stack_states_resources,
-  )
+  start_stack_states = merge(local.start_stack_states_resources, local.stack_state_done)
 
   stop_stack_states_resources = {
     for index, resource in reverse(var.resource_composition) : "Step${index + 1}" => [{
@@ -40,12 +37,7 @@ locals {
     }][resource.type == "wait" ? 0 : 1]
   }
 
-  stop_stack_states = merge(
-    {
-      "Done" : { "Type" : "Succeed" }
-    },
-    local.stop_stack_states_resources
-  )
+  stop_stack_states = merge(local.stop_stack_states_resources, local.stack_state_done)
 }
 
 data "aws_caller_identity" "current" {}
@@ -57,7 +49,7 @@ resource "aws_sfn_state_machine" "stack_start" {
   role_arn = module.step_functions_role.arn
   tags     = var.tags
 
-  definition = templatefile("${path.module}/templates/start_stack.tpl.json", {
+  definition = templatefile("${path.module}/templates/sfn_start_stack.tpl.json", {
     stack_name = var.stack_name
     states     = jsonencode(local.start_stack_states)
   })
@@ -68,7 +60,7 @@ resource "aws_sfn_state_machine" "stack_stop" {
   role_arn = module.step_functions_role.arn
   tags     = var.tags
 
-  definition = templatefile("${path.module}/templates/stop_stack.tpl.json", {
+  definition = templatefile("${path.module}/templates/sfn_stop_stack.tpl.json", {
     stack_name = var.stack_name
     states     = jsonencode(local.stop_stack_states)
   })

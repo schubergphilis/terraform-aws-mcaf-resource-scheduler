@@ -33,7 +33,8 @@ data "aws_lambda_invocation" "redshift_cluster_maintenance_windows" {
       "aws_window_expression" : each.value,
       "minutes" : local.redshift_extend_by_minutes,
       "start_stack_at" : var.start_stack_at,
-      "stop_stack_at" : var.stop_stack_at
+      "stop_stack_at" : var.stop_stack_at,
+      "timezone" : var.timezone
     }
   })
 
