@@ -5,6 +5,10 @@ This stack scheduler can be used to schedule stacks with components that can be 
 * Environments that only run during office hours
 * Environments that only run on-demand.
 
+It has the following high level architecture:
+
+![Architecture](docs/architecture.png)
+
 ## Features & Limitations
 
 ### Supported resource types
@@ -21,7 +25,7 @@ RDS only support stopping instances / clusters that are not running in multi-AZ 
 
 ### Timezone aware
 
-Schedules are timezone aware so there's no need to change schedules on any DST changes.
+Schedules are timezone aware so there's no need to change them on any DST changes, keeping https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html#daylist-savings-time in mind.
 
 ### Control order and wait times
 
@@ -44,3 +48,7 @@ Webhooks require an API key and can be setup to only allow certain IP addresses.
 Most of the supported services allow for their own methods of scheduling, either with or without timezone support. This module can not detect existing schedules so overlapping schedules could contradict each other, resulting in unexpected behaviour.
 
 ## Setup
+
+To setup this module requires a composition of the resources that need to be managed. Based on that input, a state machine is generated.
+
+Please see the [examples](examples/) folder for code examples of how to implement this module.
