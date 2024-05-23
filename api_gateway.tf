@@ -194,6 +194,10 @@ resource "aws_api_gateway_integration_response" "webhook_start_stack" {
   resource_id = aws_api_gateway_resource.webhook_start_stack[0].id
   http_method = aws_api_gateway_method.webhook_start_stack[0].http_method
   status_code = aws_api_gateway_method_response.webhook_start_stack_200[0].status_code
+
+  depends_on = [
+    aws_api_gateway_integration.webhook_start_stack[0]
+  ]
 }
 
 ##################################################
@@ -259,4 +263,8 @@ resource "aws_api_gateway_integration_response" "webhook_stop_stack" {
   resource_id = aws_api_gateway_resource.webhook_stop_stack[0].id
   http_method = aws_api_gateway_method.webhook_stop_stack[0].http_method
   status_code = aws_api_gateway_method_response.webhook_stop_stack_200[0].status_code
+
+  depends_on = [
+    aws_api_gateway_integration.webhook_stop_stack[0]
+  ]
 }
