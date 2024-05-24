@@ -29,8 +29,8 @@ def window_expression_to_cron_expressions(
 def extend_windows(
     aws_window_expression: str,
     minutes: int,
-    start_stack_at: str,
-    stop_stack_at: str,
+    start_resources_at: str,
+    stop_resources_at: str,
     timezone: str,
 ) -> Tuple[str, str, bool, bool]:
     now = datetime.now(UTC)
@@ -63,35 +63,35 @@ def extend_windows(
         f"{extended_stop.minute} {extended_stop.hour} ? * {extended_stop_dow} *"
     )
 
-    if start_stack_at != "on-demand" and stop_stack_at != "on-demand":
-        cron_stack_start = AWSCron(start_stack_at)
-        date_stack_start = cron_stack_start.occurrence(now).next()
+    if start_resources_at != "on-demand" and stop_resources_at != "on-demand":
+        cron_composition_start = AWSCron(start_resources_at)
+        date_composition_start = cron_composition_start.occurrence(now).next()
 
-        cron_stack_stop = AWSCron(stop_stack_at)
-        date_stack_stop = cron_stack_stop.occurrence(now).next()
+        cron_composition_stop = AWSCron(stop_resources_at)
+        date_composition_stop = cron_composition_stop.occurrence(now).next()
 
         if timezone != "UTC":
-            date_stack_start = date_stack_start.replace(
+            date_composition_start = date_composition_start.replace(
                 tzinfo=ZoneInfo(timezone)
             ).astimezone(tz=ZoneInfo("UTC"))
-            date_stack_stop = date_stack_stop.replace(
+            date_composition_stop = date_composition_stop.replace(
                 tzinfo=ZoneInfo(timezone)
             ).astimezone(tz=ZoneInfo("UTC"))
 
         extended_start_comp = int(extended_start.strftime("%H%M"))
         extended_stop_comp = int(extended_stop.strftime("%H%M"))
-        date_stack_start_comp = int(date_stack_start.strftime("%H%M"))
-        date_stack_stop_comp = int(date_stack_stop.strftime("%H%M"))
+        date_composition_start_comp = int(date_composition_start.strftime("%H%M"))
+        date_composition_stop_comp = int(date_composition_stop.strftime("%H%M"))
 
         if (
-            extended_start_comp >= date_stack_start_comp
-            and extended_start_comp < date_stack_stop_comp
+            extended_start_comp >= date_composition_start_comp
+            and extended_start_comp < date_composition_stop_comp
         ):
             skip_start = True
 
         if (
-            extended_stop_comp < date_stack_stop_comp
-            and extended_stop_comp >= date_stack_start_comp
+            extended_stop_comp < date_composition_stop_comp
+            and extended_stop_comp >= date_composition_start_comp
         ):
             skip_stop = True
 

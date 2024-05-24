@@ -18,9 +18,9 @@ module "scheduler_lambda" {
   filename         = data.archive_file.scheduler_source.output_path
   source_code_hash = data.archive_file.scheduler_source.output_base64sha256
 
-  name          = "stack-scheduler-${var.stack_name}"
+  name          = "resource-scheduler-${var.composition_name}"
   create_policy = false
-  description   = "Stack Scheduler Lambda Function"
+  description   = "Resource Scheduler Lambda Function"
   handler       = "scheduler.scheduler.handler"
   kms_key_arn   = var.kms_key_arn
   log_retention = 90
@@ -32,7 +32,7 @@ module "scheduler_lambda" {
 
   environment = {
     POWERTOOLS_LOG_LEVEL    = "INFO"
-    POWERTOOLS_SERVICE_NAME = "stack-scheduler-${var.stack_name}"
+    POWERTOOLS_SERVICE_NAME = "composition-scheduler-${var.composition_name}"
   }
 
   # Use a AWS provided layer to include Powertools to simplify redistribution.

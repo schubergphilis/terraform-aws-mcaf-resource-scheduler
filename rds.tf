@@ -67,8 +67,8 @@ data "aws_lambda_invocation" "rds_cluster_maintenance_windows" {
     "cron_helper_params" : {
       "aws_window_expression" : each.value,
       "minutes" : local.rds_extend_by_minutes,
-      "start_stack_at" : var.start_stack_at,
-      "stop_stack_at" : var.stop_stack_at,
+      "start_resources_at" : var.start_resources_at,
+      "stop_resources_at" : var.stop_resources_at,
       "timezone" : var.timezone
     }
   })
@@ -87,8 +87,8 @@ data "aws_lambda_invocation" "rds_cluster_backup_windows" {
     "cron_helper_params" : {
       "aws_window_expression" : each.value,
       "minutes" : local.rds_extend_by_minutes,
-      "start_stack_at" : var.start_stack_at,
-      "stop_stack_at" : var.stop_stack_at,
+      "start_resources_at" : var.start_resources_at,
+      "stop_resources_at" : var.stop_resources_at,
       "timezone" : var.timezone
     }
   })
@@ -107,8 +107,8 @@ data "aws_lambda_invocation" "rds_instance_maintenance_windows" {
     "cron_helper_params" : {
       "aws_window_expression" : each.value,
       "minutes" : local.rds_extend_by_minutes,
-      "start_stack_at" : var.start_stack_at,
-      "stop_stack_at" : var.stop_stack_at,
+      "start_resources_at" : var.start_resources_at,
+      "stop_resources_at" : var.stop_resources_at,
       "timezone" : var.timezone
     }
   })
@@ -127,8 +127,8 @@ data "aws_lambda_invocation" "rds_instance_backup_windows" {
     "cron_helper_params" : {
       "aws_window_expression" : each.value,
       "minutes" : local.rds_extend_by_minutes,
-      "start_stack_at" : var.start_stack_at,
-      "stop_stack_at" : var.stop_stack_at,
+      "start_resources_at" : var.start_resources_at,
+      "stop_resources_at" : var.stop_resources_at,
       "timezone" : var.timezone
     }
   })

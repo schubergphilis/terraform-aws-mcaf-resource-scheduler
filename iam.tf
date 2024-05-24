@@ -3,8 +3,8 @@ data "aws_iam_policy_document" "eventbridge_scheduler_policy" {
     effect  = "Allow"
     actions = ["states:StartExecution"]
     resources = [
-      aws_sfn_state_machine.stack_start.arn,
-      aws_sfn_state_machine.stack_stop.arn
+      aws_sfn_state_machine.composition_start.arn,
+      aws_sfn_state_machine.composition_stop.arn
     ]
   }
 
@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "eventbridge_scheduler_policy" {
 module "eventbridge_scheduler_role" {
   source = "github.com/schubergphilis/terraform-aws-mcaf-role?ref=v0.3.3"
 
-  name                  = "stack-scheduler-event-bridge-role-${var.stack_name}-${data.aws_region.current.name}"
+  name                  = "composition-scheduler-event-bridge-role-${var.composition_name}-${data.aws_region.current.name}"
   create_policy         = true
   postfix               = false
   principal_type        = "Service"
@@ -180,7 +180,7 @@ data "aws_iam_policy_document" "lambda_policy" {
 module "lambda_role" {
   source = "github.com/schubergphilis/terraform-aws-mcaf-role?ref=v0.3.3"
 
-  name                  = "stack-scheduler-lambda-role-${var.stack_name}-${data.aws_region.current.name}"
+  name                  = "composition-scheduler-lambda-role-${var.composition_name}-${data.aws_region.current.name}"
   create_policy         = true
   postfix               = false
   principal_type        = "Service"
@@ -200,7 +200,7 @@ data "aws_iam_policy_document" "step_functions_policy" {
 module "step_functions_role" {
   source = "github.com/schubergphilis/terraform-aws-mcaf-role?ref=v0.3.3"
 
-  name                  = "stack-scheduler-step-functions-role-${var.stack_name}-${data.aws_region.current.name}"
+  name                  = "composition-scheduler-step-functions-role-${var.composition_name}-${data.aws_region.current.name}"
   create_policy         = true
   postfix               = false
   principal_type        = "Service"
@@ -217,10 +217,10 @@ data "aws_iam_policy_document" "api_gateway_policy" {
       "states:StopExecution"
     ]
     resources = [
-      aws_sfn_state_machine.stack_start.arn,
-      aws_sfn_state_machine.stack_stop.arn,
-      "${aws_sfn_state_machine.stack_start.arn}:*",
-      "${aws_sfn_state_machine.stack_stop.arn}:*",
+      aws_sfn_state_machine.composition_start.arn,
+      aws_sfn_state_machine.composition_stop.arn,
+      "${aws_sfn_state_machine.composition_start.arn}:*",
+      "${aws_sfn_state_machine.composition_stop.arn}:*",
     ]
   }
 }
@@ -229,7 +229,7 @@ module "api_gateway_role" {
   count  = var.webhooks.deploy ? 1 : 0
   source = "github.com/schubergphilis/terraform-aws-mcaf-role?ref=v0.3.3"
 
-  name                  = "stack-scheduler-api-gateway-role-${var.stack_name}-${data.aws_region.current.name}"
+  name                  = "composition-scheduler-api-gateway-role-${var.composition_name}-${data.aws_region.current.name}"
   create_policy         = true
   postfix               = false
   principal_type        = "Service"

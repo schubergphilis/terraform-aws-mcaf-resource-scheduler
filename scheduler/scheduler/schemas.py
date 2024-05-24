@@ -25,8 +25,8 @@ INPUT = {
             "properties": {
                 "aws_window_expression": {"type": "string"},
                 "minutes": {"type": "number"},
-                "start_stack_at": {"type": "string"},
-                "stop_stack_at": {"type": "string"},
+                "start_resources_at": {"type": "string"},
+                "stop_resources_at": {"type": "string"},
                 "timezone": {"type": "string"},
             },
             "required": ["aws_window_expression", "minutes"],

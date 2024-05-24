@@ -1,7 +1,7 @@
 locals {
-  stack_state_done = { "Done" : { "Type" : "Succeed" } }
+  composition_state_done = { "Done" : { "Type" : "Succeed" } }
 
-  start_stack_states_resources = {
+  start_composition_states_resources = {
     for index, resource in var.resource_composition : "Step${index + 1}" => [{
       "Type" : "Wait",
       "Seconds" : resource.type == "wait" ? tonumber(resource.params["seconds"]) : 0,
@@ -18,9 +18,9 @@ locals {
     }][resource.type == "wait" ? 0 : 1]
   }
 
-  start_stack_states = merge(local.start_stack_states_resources, local.stack_state_done)
+  start_composition_states = merge(local.start_composition_states_resources, local.composition_state_done)
 
-  stop_stack_states_resources = {
+  stop_composition_states_resources = {
     for index, resource in reverse(var.resource_composition) : "Step${index + 1}" => [{
       "Type" : "Wait",
       "Seconds" : resource.type == "wait" ? tonumber(resource.params["seconds"]) : 0,
@@ -37,31 +37,31 @@ locals {
     }][resource.type == "wait" ? 0 : 1]
   }
 
-  stop_stack_states = merge(local.stop_stack_states_resources, local.stack_state_done)
+  stop_composition_states = merge(local.stop_composition_states_resources, local.composition_state_done)
 }
 
 data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
 
-resource "aws_sfn_state_machine" "stack_start" {
-  name     = "stack-scheduler-control-machine-start-${var.stack_name}"
+resource "aws_sfn_state_machine" "composition_start" {
+  name     = "composition-scheduler-control-machine-start-${var.composition_name}"
   role_arn = module.step_functions_role.arn
   tags     = var.tags
 
-  definition = templatefile("${path.module}/templates/sfn_start_stack.tpl.json", {
-    stack_name = var.stack_name
-    states     = jsonencode(local.start_stack_states)
+  definition = templatefile("${path.module}/templates/sfn_start_composition.tpl.json", {
+    composition_name = var.composition_name
+    states           = jsonencode(local.start_composition_states)
   })
 }
 
-resource "aws_sfn_state_machine" "stack_stop" {
-  name     = "stack-scheduler-control-machine-stop-${var.stack_name}"
+resource "aws_sfn_state_machine" "composition_stop" {
+  name     = "composition-scheduler-control-machine-stop-${var.composition_name}"
   role_arn = module.step_functions_role.arn
   tags     = var.tags
 
-  definition = templatefile("${path.module}/templates/sfn_stop_stack.tpl.json", {
-    stack_name = var.stack_name
-    states     = jsonencode(local.stop_stack_states)
+  definition = templatefile("${path.module}/templates/sfn_stop_composition.tpl.json", {
+    composition_name = var.composition_name
+    states           = jsonencode(local.stop_composition_states)
   })
 }

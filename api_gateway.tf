@@ -1,7 +1,7 @@
 resource "aws_api_gateway_rest_api" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
-  name = "stack-scheduler-webhooks-${var.stack_name}"
+  name = "composition-scheduler-webhooks-${var.composition_name}"
 
   endpoint_configuration {
     types = var.webhooks.private ? ["PRIVATE"] : ["REGIONAL"]
@@ -16,8 +16,8 @@ resource "aws_api_gateway_deployment" "webhooks" {
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
 
   depends_on = [
-    aws_api_gateway_integration.webhook_start_stack[0],
-    aws_api_gateway_integration.webhook_stop_stack[0],
+    aws_api_gateway_integration.webhook_start_composition[0],
+    aws_api_gateway_integration.webhook_stop_composition[0],
   ]
 
   lifecycle {
@@ -48,7 +48,7 @@ resource "aws_api_gateway_stage" "webhooks" {
 resource "aws_cloudwatch_log_group" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
-  name              = "API-Gateway-stack-scheduler-${var.stack_name}/default"
+  name              = "API-Gateway-composition-scheduler-${var.composition_name}/default"
   kms_key_id        = var.kms_key_arn
   retention_in_days = 90
   tags              = var.tags
@@ -57,7 +57,7 @@ resource "aws_cloudwatch_log_group" "webhooks" {
 resource "aws_api_gateway_usage_plan" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
-  name = "stack-scheduler-webhooks-${var.stack_name}-usage-plan"
+  name = "composition-scheduler-webhooks-${var.composition_name}-usage-plan"
   tags = var.tags
 
   api_stages {
@@ -69,7 +69,7 @@ resource "aws_api_gateway_usage_plan" "webhooks" {
 resource "aws_api_gateway_api_key" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
-  name = "stack-scheduler-webhooks-${var.stack_name}-api-key"
+  name = "composition-scheduler-webhooks-${var.composition_name}-api-key"
   tags = var.tags
 }
 
@@ -135,7 +135,7 @@ resource "aws_api_gateway_model" "webhooks" {
 # /start
 ##################################################
 
-resource "aws_api_gateway_resource" "webhook_start_stack" {
+resource "aws_api_gateway_resource" "webhook_start_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
@@ -143,22 +143,22 @@ resource "aws_api_gateway_resource" "webhook_start_stack" {
   path_part   = "start"
 }
 
-resource "aws_api_gateway_method" "webhook_start_stack" {
+resource "aws_api_gateway_method" "webhook_start_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id      = aws_api_gateway_rest_api.webhooks[0].id
-  resource_id      = aws_api_gateway_resource.webhook_start_stack[0].id
+  resource_id      = aws_api_gateway_resource.webhook_start_composition[0].id
   http_method      = "POST"
   authorization    = "NONE"
   api_key_required = true
 }
 
-resource "aws_api_gateway_integration" "webhook_start_stack" {
+resource "aws_api_gateway_integration" "webhook_start_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id             = aws_api_gateway_rest_api.webhooks[0].id
-  resource_id             = aws_api_gateway_resource.webhook_start_stack[0].id
-  http_method             = aws_api_gateway_method.webhook_start_stack[0].http_method
+  resource_id             = aws_api_gateway_resource.webhook_start_composition[0].id
+  http_method             = aws_api_gateway_method.webhook_start_composition[0].http_method
   integration_http_method = "POST"
   type                    = "AWS"
   uri                     = "arn:aws:apigateway:${data.aws_region.current.name}:states:action/StartExecution"
@@ -168,18 +168,18 @@ resource "aws_api_gateway_integration" "webhook_start_stack" {
     "application/json" = <<EOF
 {
   "input": "{}",
-  "stateMachineArn": "${aws_sfn_state_machine.stack_start.arn}"
+  "stateMachineArn": "${aws_sfn_state_machine.composition_start.arn}"
 }
 EOF
   }
 }
 
-resource "aws_api_gateway_method_response" "webhook_start_stack_200" {
+resource "aws_api_gateway_method_response" "webhook_start_composition_200" {
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
-  resource_id = aws_api_gateway_resource.webhook_start_stack[0].id
-  http_method = aws_api_gateway_method.webhook_start_stack[0].http_method
+  resource_id = aws_api_gateway_resource.webhook_start_composition[0].id
+  http_method = aws_api_gateway_method.webhook_start_composition[0].http_method
   status_code = "200"
 
   response_models = {
@@ -187,16 +187,16 @@ resource "aws_api_gateway_method_response" "webhook_start_stack_200" {
   }
 }
 
-resource "aws_api_gateway_integration_response" "webhook_start_stack" {
+resource "aws_api_gateway_integration_response" "webhook_start_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
-  resource_id = aws_api_gateway_resource.webhook_start_stack[0].id
-  http_method = aws_api_gateway_method.webhook_start_stack[0].http_method
-  status_code = aws_api_gateway_method_response.webhook_start_stack_200[0].status_code
+  resource_id = aws_api_gateway_resource.webhook_start_composition[0].id
+  http_method = aws_api_gateway_method.webhook_start_composition[0].http_method
+  status_code = aws_api_gateway_method_response.webhook_start_composition_200[0].status_code
 
   depends_on = [
-    aws_api_gateway_integration.webhook_start_stack[0]
+    aws_api_gateway_integration.webhook_start_composition[0]
   ]
 }
 
@@ -204,7 +204,7 @@ resource "aws_api_gateway_integration_response" "webhook_start_stack" {
 # /stop
 ##################################################
 
-resource "aws_api_gateway_resource" "webhook_stop_stack" {
+resource "aws_api_gateway_resource" "webhook_stop_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
@@ -212,22 +212,22 @@ resource "aws_api_gateway_resource" "webhook_stop_stack" {
   path_part   = "stop"
 }
 
-resource "aws_api_gateway_method" "webhook_stop_stack" {
+resource "aws_api_gateway_method" "webhook_stop_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id      = aws_api_gateway_rest_api.webhooks[0].id
-  resource_id      = aws_api_gateway_resource.webhook_stop_stack[0].id
+  resource_id      = aws_api_gateway_resource.webhook_stop_composition[0].id
   http_method      = "POST"
   authorization    = "NONE"
   api_key_required = true
 }
 
-resource "aws_api_gateway_integration" "webhook_stop_stack" {
+resource "aws_api_gateway_integration" "webhook_stop_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id             = aws_api_gateway_rest_api.webhooks[0].id
-  resource_id             = aws_api_gateway_resource.webhook_stop_stack[0].id
-  http_method             = aws_api_gateway_method.webhook_stop_stack[0].http_method
+  resource_id             = aws_api_gateway_resource.webhook_stop_composition[0].id
+  http_method             = aws_api_gateway_method.webhook_stop_composition[0].http_method
   integration_http_method = "POST"
   type                    = "AWS"
   uri                     = "arn:aws:apigateway:${data.aws_region.current.name}:states:action/StartExecution"
@@ -237,18 +237,18 @@ resource "aws_api_gateway_integration" "webhook_stop_stack" {
     "application/json" = <<EOF
 {
   "input": "{}",
-  "stateMachineArn": "${aws_sfn_state_machine.stack_stop.arn}"
+  "stateMachineArn": "${aws_sfn_state_machine.composition_stop.arn}"
 }
 EOF
   }
 }
 
-resource "aws_api_gateway_method_response" "webhook_stop_stack_200" {
+resource "aws_api_gateway_method_response" "webhook_stop_composition_200" {
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
-  resource_id = aws_api_gateway_resource.webhook_stop_stack[0].id
-  http_method = aws_api_gateway_method.webhook_stop_stack[0].http_method
+  resource_id = aws_api_gateway_resource.webhook_stop_composition[0].id
+  http_method = aws_api_gateway_method.webhook_stop_composition[0].http_method
   status_code = "200"
 
   response_models = {
@@ -256,15 +256,15 @@ resource "aws_api_gateway_method_response" "webhook_stop_stack_200" {
   }
 }
 
-resource "aws_api_gateway_integration_response" "webhook_stop_stack" {
+resource "aws_api_gateway_integration_response" "webhook_stop_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
-  resource_id = aws_api_gateway_resource.webhook_stop_stack[0].id
-  http_method = aws_api_gateway_method.webhook_stop_stack[0].http_method
-  status_code = aws_api_gateway_method_response.webhook_stop_stack_200[0].status_code
+  resource_id = aws_api_gateway_resource.webhook_stop_composition[0].id
+  http_method = aws_api_gateway_method.webhook_stop_composition[0].http_method
+  status_code = aws_api_gateway_method_response.webhook_stop_composition_200[0].status_code
 
   depends_on = [
-    aws_api_gateway_integration.webhook_stop_stack[0]
+    aws_api_gateway_integration.webhook_stop_composition[0]
   ]
 }

@@ -30,28 +30,28 @@ variable "webhooks" {
   description = "Deploy webhooks for external triggers"
 }
 
-variable "stack_name" {
+variable "composition_name" {
   type        = string
-  description = "The name of the controlled stack"
+  description = "The name of the controlled composition"
 }
 
-variable "start_stack_at" {
+variable "start_resources_at" {
   type        = string
-  description = "Stack start cron expression in selected timezone"
+  description = "Resources start cron expression in selected timezone"
 
   validation {
-    condition     = var.start_stack_at == "on-demand" || length(split(" ", var.start_stack_at)) == 6
-    error_message = "Start stack at must be on-demand or a valid cron expression."
+    condition     = var.start_resources_at == "on-demand" || length(split(" ", var.start_resources_at)) == 6
+    error_message = "Start resources at must be on-demand or a valid cron expression."
   }
 }
 
-variable "stop_stack_at" {
+variable "stop_resources_at" {
   type        = string
-  description = "Stack stop cron expression in selected timezone"
+  description = "Resources stop cron expression in selected timezone"
 
   validation {
-    condition     = var.stop_stack_at == "on-demand" || length(split(" ", var.stop_stack_at)) == 6
-    error_message = "Stop stack at must be on-demand or a valid cron expression."
+    condition     = var.stop_resources_at == "on-demand" || length(split(" ", var.stop_resources_at)) == 6
+    error_message = "Stop resources at must be on-demand or a valid cron expression."
   }
 }
 

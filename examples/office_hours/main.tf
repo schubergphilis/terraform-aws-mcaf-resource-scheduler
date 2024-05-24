@@ -1,7 +1,7 @@
 module "scheduler" {
   source = "../.."
 
-  stack_name = "sample-stack-app-1"
+  composition_name = "sample-composition-app-1"
 
   kms_key_arn = "arn:aws:kms:eu-west-1:000000000000:key/4216b078-39ad-42fa-8a9d-f1c2d68f90b3"
 
@@ -28,7 +28,7 @@ module "scheduler" {
     }
   ]
 
-  start_stack_at = "0 9 ? * MON-FRI *"
-  stop_stack_at  = "0 18 ? * MON-FRI *"
+  start_resources_at = "0 9 ? * MON-FRI *"
+  stop_resources_at  = "0 18 ? * MON-FRI *"
   timezone       = "Europe/Amsterdam"
 }

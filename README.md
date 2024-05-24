@@ -1,6 +1,6 @@
-# Stack Scheduler
+# Resource Scheduler
 
-This stack scheduler can be used to schedule stacks with components that can be temporarily stopped, like EC2 instances, RDS instances/clusters and Redshift clusters. It's aimed at:
+This composition scheduler can be used to schedule compositions with components that can be temporarily stopped, like EC2 instances, RDS instances/clusters and Redshift clusters. It's aimed at:
 
 * Environments that only run during office hours
 * Environments that only run on-demand.
@@ -35,7 +35,7 @@ The stop procedure of a schedule is the reverse of the start procedure.
 
 ### Respecting maintenance- and backup windows
 
-When setting up scheduling, the scheduler will check if configured maintenance- and backup windows on RDS instances / clusters and Redshift clusters overlap with the scheduled start- and stop times of a stack. If they don't, an additional schedule will be setup to make sure the cluster is started during the scheduled maintenance- and backup windows.
+When setting up scheduling, the scheduler will check if configured maintenance- and backup windows on RDS instances / clusters and Redshift clusters overlap with the scheduled start- and stop times of a composition. If they don't, an additional schedule will be setup to make sure the cluster is started during the scheduled maintenance- and backup windows.
 
 ### Webhooks
 

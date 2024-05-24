@@ -12,8 +12,8 @@ def test_scheduler_cron_helper_extend_windows(lambda_context):
         "cron_helper_params": {
             "aws_window_expression" :"Thu:00:00-Thu:02:00",
             "minutes": 15,
-            "start_stack_at": "0 9 ? * * *",
-            "stop_stack_at": "0 18 ? * * *",
+            "start_resources_at": "0 9 ? * * *",
+            "stop_resources_at": "0 18 ? * * *",
             "timezone": "Europe/Amsterdam"
         }
     }
