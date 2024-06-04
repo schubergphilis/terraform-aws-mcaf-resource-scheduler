@@ -3,7 +3,7 @@ from aws_lambda_powertools.utilities.validation import validator
 from typing import Dict
 
 import scheduler.schemas as schemas
-from scheduler.aws_cron.helper import extend_windows
+from scheduler.cron_helper import extend_windows
 from scheduler.resource_controllers.ec2_instance_controller import Ec2InstanceController
 from scheduler.resource_controllers.ecs_service_controller import EcsServiceController
 from scheduler.resource_controllers.auto_scaling_group_controller import (

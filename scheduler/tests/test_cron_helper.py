@@ -1,4 +1,4 @@
-from scheduler.aws_cron.helper import extend_windows
+from scheduler.cron_helper import extend_windows
 
 def test_can_extend_windows_from_aws_window_without_wday():
     out = extend_windows("04:00-05:15", 15, "on-demand", "0 18 ? * * *", "Europe/Amsterdam")

@@ -52,3 +52,9 @@ Most of the supported services allow for their own methods of scheduling, either
 To setup this module requires a composition of the resources that need to be managed. Based on that input, a state machine is generated.
 
 Please see the [examples](examples/) folder for code examples of how to implement this module.
+
+## Development
+
+This module uses the integrated Lambda to abstract some of the more complex functionality away. For redistribution purposes, the following dependencies have been vendorized:
+
+* pyawscron 1.0.6: https://pypi.org/project/pyawscron/ - https://github.com/pitchblack408/pyawscron/tree/1.0.6

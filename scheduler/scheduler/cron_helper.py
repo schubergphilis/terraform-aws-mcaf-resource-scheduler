@@ -1,6 +1,6 @@
 from datetime import datetime, UTC, timedelta
 from zoneinfo import ZoneInfo
-from scheduler.aws_cron.awscron import AWSCron
+from scheduler._vendor.pyawscron import AWSCron
 
 from typing import Tuple
 

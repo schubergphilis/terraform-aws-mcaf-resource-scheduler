@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 pytest = "~=8.2.0"
 pytest-env = "~=1.1.3"
+vendorize = "~=0.3.0"
 
 [packages]
 aws-lambda-powertools = { version = "~=2.37.0", extras = ["all"] }
