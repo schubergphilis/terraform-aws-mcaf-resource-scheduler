@@ -7,7 +7,7 @@ This composition scheduler can be used to schedule compositions with components 
 
 It has the following high level architecture:
 
-![Architecture](docs/architecture.png)
+![Architecture](https://raw.githubusercontent.com/schubergphilis/terraform-aws-mcaf-resource-scheduler/main/docs/architecture.png)
 
 ## Features
 
@@ -41,7 +41,7 @@ When setting up scheduling, the scheduler will check if configured maintenance- 
 
 Optionally a pair of webhooks can be deployed to trigger starting or stopping an environments based on external events. This allows for on-demand starting or stopping of environments by - for example - a service management ticket, a Slack integration, a custom frontend, a Github workflow, etc.
 
-Webhooks require an API key and can be setup to only allow certain IP addresses.
+Webhooks require an API key and can be setup to only allow certain IP addresses. A POST request has to be made to one of the outputted endpoints to trigger a webhook.
 
 ## Limitations
 
@@ -170,7 +170,9 @@ This module uses the integrated Lambda to abstract some of the more complex func
 | Name | Description |
 |------|-------------|
 | <a name="output_api_gateway_stage_arn"></a> [api\_gateway\_stage\_arn](#output\_api\_gateway\_stage\_arn) | n/a |
+| <a name="output_start_composition_state_machine_arn"></a> [start\_composition\_state\_machine\_arn](#output\_start\_composition\_state\_machine\_arn) | n/a |
 | <a name="output_start_composition_webhook_url"></a> [start\_composition\_webhook\_url](#output\_start\_composition\_webhook\_url) | n/a |
+| <a name="output_stop_composition_state_machine_arn"></a> [stop\_composition\_state\_machine\_arn](#output\_stop\_composition\_state\_machine\_arn) | n/a |
 | <a name="output_stop_composition_webhook_url"></a> [stop\_composition\_webhook\_url](#output\_stop\_composition\_webhook\_url) | n/a |
 | <a name="output_webhook_api_key"></a> [webhook\_api\_key](#output\_webhook\_api\_key) | n/a |
 <!-- END_TF_DOCS -->
