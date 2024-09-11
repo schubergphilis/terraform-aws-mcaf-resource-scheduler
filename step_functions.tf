@@ -44,9 +44,16 @@ data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
 
+resource "aws_cloudwatch_log_group" "composition_start" {
+  name              = "sfn-composition-scheduler-start-${var.composition_name}"
+  kms_key_id        = var.kms_key_arn
+  retention_in_days = 365
+  tags              = var.tags
+}
+
 resource "aws_sfn_state_machine" "composition_start" {
   #checkov:skip=CKV_AWS_284
-  name     = "composition-scheduler-control-machine-start-${var.composition_name}"
+  name     = "composition-scheduler-start-${var.composition_name}"
   role_arn = module.step_functions_role.arn
   tags     = var.tags
 
@@ -56,14 +63,22 @@ resource "aws_sfn_state_machine" "composition_start" {
   })
 
   logging_configuration {
-    level                  = "ALL"
     include_execution_data = true
+    level                  = "ALL"
+    log_destination        = "${aws_cloudwatch_log_group.composition_start.arn}:*"
   }
+}
+
+resource "aws_cloudwatch_log_group" "composition_stop" {
+  name              = "sfn-composition-scheduler-stop-${var.composition_name}"
+  kms_key_id        = var.kms_key_arn
+  retention_in_days = 365
+  tags              = var.tags
 }
 
 resource "aws_sfn_state_machine" "composition_stop" {
   #checkov:skip=CKV_AWS_284
-  name     = "composition-scheduler-control-machine-stop-${var.composition_name}"
+  name     = "composition-scheduler-stop-${var.composition_name}"
   role_arn = module.step_functions_role.arn
   tags     = var.tags
 
@@ -73,7 +88,8 @@ resource "aws_sfn_state_machine" "composition_stop" {
   })
 
   logging_configuration {
-    level                  = "ALL"
     include_execution_data = true
+    level                  = "ALL"
+    log_destination        = "${aws_cloudwatch_log_group.composition_stop.arn}:*"
   }
 }
