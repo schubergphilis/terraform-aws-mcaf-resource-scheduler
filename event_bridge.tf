@@ -4,6 +4,7 @@ resource "aws_scheduler_schedule_group" "scheduler" {
 }
 
 resource "aws_scheduler_schedule" "start_composition" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   count = var.start_resources_at == "on-demand" ? 0 : 1
 
   name                         = "${var.composition_name}-start"
@@ -28,6 +29,7 @@ resource "aws_scheduler_schedule" "start_composition" {
 }
 
 resource "aws_scheduler_schedule" "stop_composition" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   count = var.stop_resources_at == "on-demand" ? 0 : 1
 
   name                         = "${var.composition_name}-stop"
@@ -52,6 +54,7 @@ resource "aws_scheduler_schedule" "stop_composition" {
 }
 
 resource "aws_scheduler_schedule" "redshift_cluster_maintenance_start" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   for_each = local.redshift_cluster_extended_maintenance_windows
 
   name                         = "schedule-${var.composition_name}-redshift-cluster-maint-start-${index(keys(local.redshift_cluster_extended_maintenance_windows), each.key)}"
@@ -84,6 +87,7 @@ resource "aws_scheduler_schedule" "redshift_cluster_maintenance_start" {
 }
 
 resource "aws_scheduler_schedule" "redshift_cluster_maintenance_stop" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   for_each = local.redshift_cluster_extended_maintenance_windows
 
   name                         = "schedule-${var.composition_name}-redshift-cluster-maint-stop-${index(keys(local.redshift_cluster_extended_maintenance_windows), each.key)}"
@@ -116,6 +120,7 @@ resource "aws_scheduler_schedule" "redshift_cluster_maintenance_stop" {
 }
 
 resource "aws_scheduler_schedule" "rds_cluster_maintenance_start" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   for_each = local.rds_cluster_extended_maintenance_windows
 
   name                         = "schedule-${var.composition_name}-rds-cluster-maint-start-${index(keys(local.rds_cluster_extended_maintenance_windows), each.key)}"
@@ -148,6 +153,7 @@ resource "aws_scheduler_schedule" "rds_cluster_maintenance_start" {
 }
 
 resource "aws_scheduler_schedule" "rds_cluster_maintenance_stop" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   for_each = local.rds_cluster_extended_maintenance_windows
 
   name                         = "schedule-${var.composition_name}-rds-cluster-maint-stop-${index(keys(local.rds_cluster_extended_maintenance_windows), each.key)}"
@@ -180,6 +186,7 @@ resource "aws_scheduler_schedule" "rds_cluster_maintenance_stop" {
 }
 
 resource "aws_scheduler_schedule" "rds_cluster_backup_start" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   for_each = local.rds_cluster_extended_backup_windows
 
   name                         = "schedule-${var.composition_name}-rds-cluster-backup-start-${index(keys(local.rds_cluster_extended_backup_windows), each.key)}"
@@ -212,6 +219,7 @@ resource "aws_scheduler_schedule" "rds_cluster_backup_start" {
 }
 
 resource "aws_scheduler_schedule" "rds_cluster_backup_stop" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   for_each = local.rds_cluster_extended_backup_windows
 
   name                         = "schedule-${var.composition_name}-rds-cluster-backup-stop-${index(keys(local.rds_cluster_extended_backup_windows), each.key)}"
@@ -244,6 +252,7 @@ resource "aws_scheduler_schedule" "rds_cluster_backup_stop" {
 }
 
 resource "aws_scheduler_schedule" "rds_instance_maintenance_start" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   for_each = local.rds_instance_extended_maintenance_windows
 
   name                         = "schedule-${var.composition_name}-rds-instance-maint-start-${index(keys(local.rds_instance_extended_maintenance_windows), each.key)}"
@@ -276,6 +285,7 @@ resource "aws_scheduler_schedule" "rds_instance_maintenance_start" {
 }
 
 resource "aws_scheduler_schedule" "rds_instance_maintenance_stop" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   for_each = local.rds_instance_extended_maintenance_windows
 
   name                         = "schedule-${var.composition_name}-rds-instance-maint-stop-${index(keys(local.rds_instance_extended_maintenance_windows), each.key)}"
@@ -308,6 +318,7 @@ resource "aws_scheduler_schedule" "rds_instance_maintenance_stop" {
 }
 
 resource "aws_scheduler_schedule" "rds_instance_backup_start" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   for_each = local.rds_instance_extended_backup_windows
 
   name                         = "schedule-${var.composition_name}-rds-instance-backup-start-${index(keys(local.rds_instance_extended_backup_windows), each.key)}"
@@ -340,6 +351,7 @@ resource "aws_scheduler_schedule" "rds_instance_backup_start" {
 }
 
 resource "aws_scheduler_schedule" "rds_instance_backup_stop" {
+  #checkov:skip=CKV_AWS_297:The target input does not contain sensitive data
   for_each = local.rds_instance_extended_backup_windows
 
   name                         = "schedule-${var.composition_name}-rds-instance-backup-stop-${index(keys(local.rds_instance_extended_backup_windows), each.key)}"

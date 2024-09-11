@@ -45,23 +45,35 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 resource "aws_sfn_state_machine" "composition_start" {
+  #checkov:skip=CKV_AWS_284
   name     = "composition-scheduler-control-machine-start-${var.composition_name}"
   role_arn = module.step_functions_role.arn
   tags     = var.tags
 
-  definition = templatefile("${path.module}/templates/sfn_start_composition.tpl.json", {
+  definition = templatefile("${path.module}/templates/sfn_start_composition.json.tpl", {
     composition_name = var.composition_name
     states           = jsonencode(local.start_composition_states)
   })
+
+  logging_configuration {
+    level                  = "ALL"
+    include_execution_data = true
+  }
 }
 
 resource "aws_sfn_state_machine" "composition_stop" {
+  #checkov:skip=CKV_AWS_284
   name     = "composition-scheduler-control-machine-stop-${var.composition_name}"
   role_arn = module.step_functions_role.arn
   tags     = var.tags
 
-  definition = templatefile("${path.module}/templates/sfn_stop_composition.tpl.json", {
+  definition = templatefile("${path.module}/templates/sfn_stop_composition.json.tpl", {
     composition_name = var.composition_name
     states           = jsonencode(local.stop_composition_states)
   })
+
+  logging_configuration {
+    level                  = "ALL"
+    include_execution_data = true
+  }
 }

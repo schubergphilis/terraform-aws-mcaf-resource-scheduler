@@ -30,5 +30,5 @@ module "scheduler" {
 
   start_resources_at = "0 9 ? * MON-FRI *"
   stop_resources_at  = "0 18 ? * MON-FRI *"
-  timezone       = "Europe/Amsterdam"
+  timezone           = "Europe/Amsterdam"
 }
