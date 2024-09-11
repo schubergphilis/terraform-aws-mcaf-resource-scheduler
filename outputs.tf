@@ -9,3 +9,7 @@ output "stop_composition_webhook_url" {
 output "webhook_api_key" {
   value = var.webhooks.deploy ? aws_api_gateway_api_key.webhooks[0].value : null
 }
+
+output "api_gateway_stage_arn" {
+  value = var.webhooks.deploy ? aws_api_gateway_stage.webhooks[0].arn : null
+}

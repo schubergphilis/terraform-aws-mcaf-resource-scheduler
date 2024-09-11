@@ -25,8 +25,9 @@ resource "aws_api_gateway_deployment" "webhooks" {
   }
 }
 
-#tfsec:ignore:aws-api-gateway-enable-tracing
 resource "aws_api_gateway_stage" "webhooks" {
+  #checkov:skip=CKV2_AWS_29:The API Gateway can be IP whitelisted. The stage ARN is part of the output for users to setup their own WAF outside of this module if desired.
+  #checkov:skip=CKV2_AWS_51
   count = var.webhooks.deploy ? 1 : 0
 
   deployment_id = aws_api_gateway_deployment.webhooks[0].id
@@ -43,6 +44,19 @@ resource "aws_api_gateway_stage" "webhooks" {
   depends_on = [
     aws_cloudwatch_log_group.webhooks[0]
   ]
+}
+
+resource "aws_api_gateway_method_settings" "webhooks" {
+  count = var.webhooks.deploy ? 1 : 0
+
+  rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
+  stage_name  = aws_api_gateway_stage.webhooks[0].stage_name
+  method_path = "*/*"
+
+  settings {
+    metrics_enabled = true
+    logging_level   = "INFO"
+  }
 }
 
 resource "aws_cloudwatch_log_group" "webhooks" {
@@ -144,6 +158,7 @@ resource "aws_api_gateway_resource" "webhook_start_composition" {
 }
 
 resource "aws_api_gateway_method" "webhook_start_composition" {
+  #checkov:skip=CKV2_AWS_53:These webhooks take no parameters or request body to validate
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id      = aws_api_gateway_rest_api.webhooks[0].id
@@ -213,6 +228,7 @@ resource "aws_api_gateway_resource" "webhook_stop_composition" {
 }
 
 resource "aws_api_gateway_method" "webhook_stop_composition" {
+  #checkov:skip=CKV2_AWS_53:These webhooks take no parameters or request body to validate
   count = var.webhooks.deploy ? 1 : 0
 
   rest_api_id      = aws_api_gateway_rest_api.webhooks[0].id

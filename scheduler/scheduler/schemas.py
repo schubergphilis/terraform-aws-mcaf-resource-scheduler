@@ -1,7 +1,7 @@
 INPUT = {
     "$schema": "https://json-schema.org/draft-07/schema",
     "type": "object",
-    "title": "Stack Scheduler Schema",
+    "title": "Resource Scheduler Schema",
     "properties": {
         "action": {
             "type": "string",
