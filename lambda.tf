@@ -38,7 +38,7 @@ module "scheduler_lambda" {
   # Use a AWS provided layer to include Powertools to simplify redistribution.
   # Also see https://docs.powertools.aws.dev/lambda/python/latest/#lambda-layer.
   layers = [
-    "arn:aws:lambda:${data.aws_region.current.name}:017000801446:layer:AWSLambdaPowertoolsPythonV2:58"
+    "arn:aws:lambda:${data.aws_region.current.name}:017000801446:layer:AWSLambdaPowertoolsPythonV2:79"
   ]
 
   tags = var.tags

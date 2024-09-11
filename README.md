@@ -3,13 +3,13 @@
 This composition scheduler can be used to schedule compositions with components that can be temporarily stopped, like EC2 instances, RDS instances/clusters and Redshift clusters. It's aimed at:
 
 * Environments that only run during office hours
-* Environments that only run on-demand.
+* Environments that only run on-demand
 
 It has the following high level architecture:
 
 ![Architecture](docs/architecture.png)
 
-## Features & Limitations
+## Features
 
 ### Supported resource types
 
@@ -43,9 +43,21 @@ Optionally a pair of webhooks can be deployed to trigger starting or stopping an
 
 Webhooks require an API key and can be setup to only allow certain IP addresses.
 
-### Limitation: schedule mixing
+## Limitations
+
+### Schedule mixing
 
 Most of the supported services allow for their own methods of scheduling, either with or without timezone support. This module can not detect existing schedules so overlapping schedules could contradict each other, resulting in unexpected behaviour.
+
+### RDS snapshot retention
+
+When an RDS instance is stopped, the stopped time does not count towards the retention time of snapshots. Effectively this means that any snapshot will be retained longer than expected, including any associated cost.
+
+This behaviour is described here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ManagingAutomatedBackups.html
+
+### AWS Backup integration
+
+For AWS Backup to be able to create a backup of an RDS instance, it needs to be running. This module is currently not capable of automatically detecting the schedule of any AWS Backup plans. In such cases you will need to manually align the schedules.
 
 ## Setup
 
