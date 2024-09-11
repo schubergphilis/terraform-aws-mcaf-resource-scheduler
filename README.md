@@ -170,7 +170,9 @@ This module uses the integrated Lambda to abstract some of the more complex func
 | Name | Description |
 |------|-------------|
 | <a name="output_api_gateway_stage_arn"></a> [api\_gateway\_stage\_arn](#output\_api\_gateway\_stage\_arn) | n/a |
+| <a name="output_start_composition_state_machine_arn"></a> [start\_composition\_state\_machine\_arn](#output\_start\_composition\_state\_machine\_arn) | n/a |
 | <a name="output_start_composition_webhook_url"></a> [start\_composition\_webhook\_url](#output\_start\_composition\_webhook\_url) | n/a |
+| <a name="output_stop_composition_state_machine_arn"></a> [stop\_composition\_state\_machine\_arn](#output\_stop\_composition\_state\_machine\_arn) | n/a |
 | <a name="output_stop_composition_webhook_url"></a> [stop\_composition\_webhook\_url](#output\_stop\_composition\_webhook\_url) | n/a |
 | <a name="output_webhook_api_key"></a> [webhook\_api\_key](#output\_webhook\_api\_key) | n/a |
 <!-- END_TF_DOCS -->
