@@ -7,7 +7,7 @@ This composition scheduler can be used to schedule compositions with components 
 
 It has the following high level architecture:
 
-![Architecture](docs/architecture.png)
+![Architecture](https://raw.githubusercontent.com/schubergphilis/terraform-aws-mcaf-resource-scheduler/main/docs/architecture.png)
 
 ## Features
 
@@ -41,7 +41,7 @@ When setting up scheduling, the scheduler will check if configured maintenance- 
 
 Optionally a pair of webhooks can be deployed to trigger starting or stopping an environments based on external events. This allows for on-demand starting or stopping of environments by - for example - a service management ticket, a Slack integration, a custom frontend, a Github workflow, etc.
 
-Webhooks require an API key and can be setup to only allow certain IP addresses.
+Webhooks require an API key and can be setup to only allow certain IP addresses. A POST request has to be made to one of the outputted endpoints to trigger a webhook.
 
 ## Limitations
 
