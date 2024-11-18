@@ -9,6 +9,9 @@ from scheduler.resource_controllers.ecs_service_controller import EcsServiceCont
 from scheduler.resource_controllers.auto_scaling_group_controller import (
     AutoscalingGroupController,
 )
+from scheduler.resource_controllers.fsx_windows_file_system_controller import (
+    FsxWindowsFileSystemController,
+)
 from scheduler.resource_controllers.rds_cluster_controller import RdsClusterController
 from scheduler.resource_controllers.rds_instance_controller import RdsInstanceController
 from scheduler.resource_controllers.redshift_cluster_controller import (
@@ -58,6 +61,10 @@ def handler(event, _context) -> Dict:
             success, msg = RedshiftClusterController(**params).start()
         case ("redshift_cluster", "stop"):
             success, msg = RedshiftClusterController(**params).stop()
+        case ("fsx_windows_file_system", "start"):
+            success, msg = FsxWindowsFileSystemController(**params).start()
+        case ("fsx_windows_file_system", "stop"):
+            success, msg = FsxWindowsFileSystemController(**params).stop()
 
     if success:
         logger.info(msg)

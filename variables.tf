@@ -11,8 +11,8 @@ variable "resource_composition" {
   description = "Resource composition"
 
   validation {
-    condition     = length([for r in var.resource_composition : r if contains(["ec2_instance", "rds_instance", "rds_cluster", "auto_scaling_group", "ecs_service", "redshift_cluster", "wait"], r.type)]) == length(var.resource_composition)
-    error_message = "Resource type must be one of ec2_instance, rds_instance, rds_cluster, auto_scaling_group, ecs_service or redshift_cluster"
+    condition     = length([for r in var.resource_composition : r if contains(["ec2_instance", "rds_instance", "rds_cluster", "auto_scaling_group", "ecs_service", "redshift_cluster", "wait", "fsx_windows_file_system"], r.type)]) == length(var.resource_composition)
+    error_message = "Resource type must be one of ec2_instance, rds_instance, rds_cluster, auto_scaling_group, ecs_service, redshift_cluster or fsx_windows_file_system"
   }
 }
 

@@ -175,6 +175,22 @@ data "aws_iam_policy_document" "lambda_policy" {
       ]
     }
   }
+
+  dynamic "statement" {
+    for_each = contains(local.resource_types_in_composition, "fsx_windows_file_system") ? toset(["fsx_windows_file_system"]) : toset([])
+
+    content {
+      effect = "Allow"
+      actions = [
+        "fsx:UpdateFileSystem"
+      ]
+      resources = [
+        for resource in var.resource_composition :
+        "arn:aws:fsx:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:db:${resource.params["id"]}"
+        if resource.type == "fsx_windows_file_system"
+      ]
+    }
+  }
 }
 
 module "lambda_role" {

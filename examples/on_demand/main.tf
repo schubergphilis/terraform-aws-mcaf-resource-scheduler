@@ -13,6 +13,14 @@ module "scheduler" {
       }
     },
     {
+      "type" : "fsx_windows_file_system",
+      "params" : {
+        "id" : "fs-0a1b2c3d4e5f6g7h8",
+        "start_throughput_capacity": 256,
+        "stop_throughput_capacity": 16
+      }
+    },
+    {
       "type" : "wait",
       "params" : {
         "seconds" : 600

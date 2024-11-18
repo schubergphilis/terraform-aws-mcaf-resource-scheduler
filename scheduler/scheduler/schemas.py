@@ -11,13 +11,14 @@ INPUT = {
         "resource_type": {
             "type": "string",
             "enum": [
-                "rds_instance",
-                "rds_cluster",
                 "auto_scaling_group",
+                "cron_helper",
                 "ec2_instance",
                 "ecs_service",
+                "fsx_windows_file_system",
+                "rds_cluster",
+                "rds_instance",
                 "redshift_cluster",
-                "cron_helper",
             ],
         },
         "cron_helper_params": {
@@ -71,6 +72,21 @@ INPUT = {
                 "desired": {"type": "string"},
             },
             "required": ["cluster_name", "name", "desired"],
+        },
+        "fsx_windows_file_system_params": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                },
+                "start_throughput_capacity": {"type": "string"},
+                "stop_throughput_capacity": {"type": "string"},
+            },
+            "required": [
+                "id",
+                "start_throughput_capacity",
+                "stop_throughput_capacity",
+            ],
         },
     },
     "allOf": [
