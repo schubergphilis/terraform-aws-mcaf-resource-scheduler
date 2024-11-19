@@ -79,13 +79,11 @@ INPUT = {
                 "id": {
                     "type": "string",
                 },
-                "start_throughput_capacity": {"type": "string"},
-                "stop_throughput_capacity": {"type": "string"},
+                "throughput_capacity": {"type": "string"},
             },
             "required": [
                 "id",
-                "start_throughput_capacity",
-                "stop_throughput_capacity",
+                "throughput_capacity",
             ],
         },
     },
