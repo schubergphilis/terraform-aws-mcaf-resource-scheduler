@@ -66,7 +66,7 @@ FSx Windows File System provisioned throughput is quite expensive. It could be w
 
 See https://docs.aws.amazon.com/fsx/latest/WindowsGuide/performance.html for more information.
 
-Throughput can't be changed until 6 hours after the last change was requested. After a throughput change an optimization phase takes place that could take longer than 6 hours;depending on the size off the file system. Throughput can also not be changed during this optimization phase. Use with care.
+Throughput can't be changed until 6 hours after the last change was requested. After a throughput change an optimization phase takes place that could take longer than 6 hours; depending on the size off the file system. Throughput can also not be changed during this optimization phase. Use with care.
 
 See https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-configuration.html#managing-storage-capacity for more information.
 
