@@ -13,14 +13,22 @@ It has the following high level architecture:
 
 ### Supported resource types
 
-The following resoure types can be controlled via this scheduler:
+The following resoure types and actions can be controlled via this scheduler:
 
 * EC2 Auto-Scaling Groups
+    * Max size, min size, desired capacity
+* EC2 Instances
+    * Stop/start the instance
 * ECS Services
+    * Set desired Tasks
 * FSx Windows File Systems
+    * Set throughput Capacity
 * RDS Clusters
+    * Stop/start the cluster
 * RDS Instances
+    * Stop/start the instance
 * Redshift Clusters
+    * Pause/resume the cluster
 
 RDS only support stopping instances / clusters that are not running in multi-AZ mode.
 
