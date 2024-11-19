@@ -20,9 +20,9 @@ The following resoure types and actions can be controlled via this scheduler:
 * EC2 Instances
     * Stop/start the instance
 * ECS Services
-    * Set desired Tasks
+    * Set desired tasks
 * FSx Windows File Systems
-    * Set throughput Capacity
+    * Set throughput capacity
 * RDS Clusters
     * Stop/start the cluster
 * RDS Instances
