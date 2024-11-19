@@ -186,8 +186,7 @@ def test_scheduler_fsx_windows_file_system_start(lambda_context):
         "action": "start",
         "fsx_windows_file_system_params": {
             "id": "fs-1234567890",
-            "start_throughput_capacity": "512",
-            "stop_throughput_capacity": "16"
+            "throughput_capacity": "512",
         }
     }
 
@@ -200,8 +199,7 @@ def test_scheduler_fsx_windows_file_system_stop(lambda_context):
         "action": "stop",
         "fsx_windows_file_system_params": {
             "id": "fs-1234567890",
-            "start_throughput_capacity": "512",
-            "stop_throughput_capacity": "16"
+            "throughput_capacity": "512",
         }
     }
 
