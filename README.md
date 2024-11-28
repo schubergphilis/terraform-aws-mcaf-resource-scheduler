@@ -13,13 +13,22 @@ It has the following high level architecture:
 
 ### Supported resource types
 
-The following resoure types can be controlled via this scheduler:
+The following resoure types and actions can be controlled via this scheduler:
 
 * EC2 Auto-Scaling Groups
+    * Max size, min size, desired capacity
+* EC2 Instances
+    * Stop/start the instance
 * ECS Services
+    * Set desired tasks
+* FSx Windows File Systems
+    * Set throughput capacity
 * RDS Clusters
+    * Stop/start the cluster
 * RDS Instances
+    * Stop/start the instance
 * Redshift Clusters
+    * Pause/resume the cluster
 
 RDS only support stopping instances / clusters that are not running in multi-AZ mode.
 
@@ -58,6 +67,16 @@ This behaviour is described here: https://docs.aws.amazon.com/AmazonRDS/latest/U
 ### AWS Backup integration
 
 For AWS Backup to be able to create a backup of an RDS instance, it needs to be running. This module is currently not capable of automatically detecting the schedule of any AWS Backup plans. In such cases you will need to manually align the schedules.
+
+### FSx Windows File Systems
+
+FSx Windows File System provisioned throughput is quite expensive. It could be worthwhile to scale down on provisioned throughput during off-hours. Changing provisioned throughput also affects network I/O, memory and disk I/O of the file system.
+
+See https://docs.aws.amazon.com/fsx/latest/WindowsGuide/performance.html for more information.
+
+Throughput can't be changed until 6 hours after the last change was requested. After a throughput change an optimization phase takes place that could take longer than 6 hours; depending on the size off the file system. Throughput can also not be changed during this optimization phase. Use with care.
+
+See https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-configuration.html#managing-storage-capacity for more information.
 
 ## Setup
 

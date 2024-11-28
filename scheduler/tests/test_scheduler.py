@@ -179,3 +179,29 @@ def test_scheduler_redshift_cluster_stop(lambda_context):
 
     with pytest.raises(NoCredentialsError):
         handler(payload, lambda_context)
+
+def test_scheduler_fsx_windows_file_system_start(lambda_context):
+    payload = {
+        "resource_type": "fsx_windows_file_system",
+        "action": "start",
+        "fsx_windows_file_system_params": {
+            "id": "fs-1234567890",
+            "throughput_capacity": "512",
+        }
+    }
+
+    with pytest.raises(NoCredentialsError):
+        handler(payload, lambda_context)
+
+def test_scheduler_fsx_windows_file_system_stop(lambda_context):
+    payload = {
+        "resource_type": "fsx_windows_file_system",
+        "action": "stop",
+        "fsx_windows_file_system_params": {
+            "id": "fs-1234567890",
+            "throughput_capacity": "512",
+        }
+    }
+
+    with pytest.raises(NoCredentialsError):
+        handler(payload, lambda_context)
