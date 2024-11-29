@@ -186,7 +186,7 @@ data "aws_iam_policy_document" "lambda_policy" {
       ]
       resources = [
         for resource in var.resource_composition :
-        "arn:aws:fsx:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:db:${resource.params["id"]}"
+        "arn:aws:fsx:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:file-system/${resource.params["id"]}"
         if resource.type == "fsx_windows_file_system"
       ]
     }
