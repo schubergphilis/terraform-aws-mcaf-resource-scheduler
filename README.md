@@ -196,7 +196,7 @@ This module uses the integrated Lambda to abstract some of the more complex func
 | <a name="input_stop_resources_at"></a> [stop\_resources\_at](#input\_stop\_resources\_at) | Resources stop cron expression in selected timezone | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Mapping of tags | `map(string)` | `{}` | no |
 | <a name="input_timezone"></a> [timezone](#input\_timezone) | Timezone to execute schedules in | `string` | `"UTC"` | no |
-| <a name="input_webhooks"></a> [webhooks](#input\_webhooks) | Deploy webhooks for external triggers | <pre>object({<br>    deploy       = bool<br>    ip_whitelist = list(string)<br>    private      = optional(bool, false)<br>  })</pre> | <pre>{<br>  "deploy": false,<br>  "ip_whitelist": [],<br>  "private": false<br>}</pre> | no |
+| <a name="input_webhooks"></a> [webhooks](#input\_webhooks) | Deploy webhooks for external triggers from whitelisted IP CIDR's. | <pre>object({<br>    deploy       = bool<br>    ip_whitelist = list(string)<br>    private      = optional(bool, false)<br>  })</pre> | <pre>{<br>  "deploy": false,<br>  "ip_whitelist": [],<br>  "private": false<br>}</pre> | no |
 
 ## Outputs
 
