@@ -21,7 +21,7 @@ module "scheduler" {
     {
       "type" : "ecs_service",
       "params" : {
-        "cluster_name" : "application-cluster-1"
+        "cluster_name" : "application-cluster-1",
         "name" : "application-service-1",
         "desired" : 2
       }
