@@ -104,6 +104,24 @@ This module uses the integrated Lambda to abstract some of the more complex func
 
 * pyawscron 1.0.6: https://pypi.org/project/pyawscron/ - https://github.com/pitchblack408/pyawscron/tree/1.0.6
 
+### Adding support for more resources
+
+This module is extendable. To add support for more resources, follow these general steps:
+
+1. In the Lambda code
+    1. Add a test
+    1. Add the resource controller
+    1. Add the resource to the handler
+    1. Add the resource to the schema
+    1. Make sure tests pass
+
+1. In the Terraform code
+    1. Add the resource to the resource_composition variable
+    1. Add validation to the resource_composition variable
+    1. Add an example
+    1. Update this README
+    1. Make sure validations pass
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
