@@ -52,6 +52,26 @@ Optionally a pair of webhooks can be deployed to trigger starting or stopping an
 
 Webhooks require an API key and can be setup to only allow certain IP addresses. A POST request has to be made to one of the outputted endpoints to trigger a webhook.
 
+## Setup
+
+To setup this module requires a composition of the resources that need to be managed. Based on that input, a state machine is generated. Be aware that the composition dictates order: the resources in the composition are controlled in that order when the composition is started. The order is reversed when the composition is stopped.
+
+Please see the [examples](examples/) folder for code examples of how to implement this module.
+
+### Configuration
+
+Resource types require certain parameters in order to function. It's recommended to fill the parameters by refering to existing resources in your TF code.
+
+| Resource | Resource Type | Required Parameters |
+| --- | --- | --- |
+| EC2 Auto-Scaling Group | auto_scaling_group | **name:** the name of the auto-scaling group to control<br>**min:** the minimal number of instances to run (used on start of composition)<br>**max:** the maximum number of instances to run, used on start of composition<br>**desired:** the desired number of instances to run, used on start of composition |
+| EC2 Instance | ec2_instance | **id:** the ID of the instance to control |
+| ECS Service | ecs_service | **cluster_name:** the name of the ECS cluster the task runs on<br>**desired:** the desired number of tasks, used on start of composition<br>**name:** the name of the ECS task to control |
+| FSX Windows Filesystem | fsx_windows_file_system | **id:** the ID of the filesystem to control<br>**throughput_capacity:** the throughput capacity of the filesystem, used on start of composition |
+| RDS Cluster | rds_cluster | **id:** the ID of the cluster to control |
+| RDS Instance | rds_instance | **id:** the ID of the instance to control |
+| Redshift Cluster | redshift_cluster | **id:** the ID of the cluster to control |
+
 ## Limitations
 
 ### Schedule mixing
@@ -77,12 +97,6 @@ See https://docs.aws.amazon.com/fsx/latest/WindowsGuide/performance.html for mor
 Throughput can't be changed until 6 hours after the last change was requested. After a throughput change an optimization phase takes place that could take longer than 6 hours; depending on the size off the file system. Throughput can also not be changed during this optimization phase. Use with care.
 
 See https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-configuration.html#managing-storage-capacity for more information.
-
-## Setup
-
-To setup this module requires a composition of the resources that need to be managed. Based on that input, a state machine is generated.
-
-Please see the [examples](examples/) folder for code examples of how to implement this module.
 
 ## Development
 
