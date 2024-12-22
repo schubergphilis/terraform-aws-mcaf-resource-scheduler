@@ -4,10 +4,13 @@ from typing import Dict
 
 import scheduler.schemas as schemas
 from scheduler.cron_helper import extend_windows
-from scheduler.resource_controllers.ec2_instance_controller import Ec2InstanceController
-from scheduler.resource_controllers.ecs_service_controller import EcsServiceController
 from scheduler.resource_controllers.auto_scaling_group_controller import (
     AutoscalingGroupController,
+)
+from scheduler.resource_controllers.ec2_instance_controller import Ec2InstanceController
+from scheduler.resource_controllers.ecs_service_controller import EcsServiceController
+from scheduler.resource_controllers.efs_file_system_controller import (
+    EfsFileSystemController,
 )
 from scheduler.resource_controllers.fsx_windows_file_system_controller import (
     FsxWindowsFileSystemController,
@@ -65,6 +68,10 @@ def handler(event, _context) -> Dict:
             success, msg = FsxWindowsFileSystemController(**params).start()
         case ("fsx_windows_file_system", "stop"):
             success, msg = FsxWindowsFileSystemController(**params).stop()
+        case ("efs_file_system", "start"):
+            success, msg = EfsFileSystemController(**params).start()
+        case ("efs_file_system", "stop"):
+            success, msg = EfsFileSystemController(**params).stop()
 
     if success:
         logger.info(msg)

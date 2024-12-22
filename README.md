@@ -21,6 +21,8 @@ The following resoure types and actions can be controlled via this scheduler:
     * Stop/start the instance
 * ECS Services
     * Set desired tasks
+* EFS File Systems
+    * Set provisioned throughput
 * FSx Windows File Systems
     * Set throughput capacity
 * RDS Clusters
@@ -67,6 +69,7 @@ Resource types require certain parameters in order to function. It's recommended
 | EC2 Auto-Scaling Group | auto_scaling_group | **name:** the name of the auto-scaling group to control<br>**min:** the minimal number of instances to run (used on start of composition)<br>**max:** the maximum number of instances to run (used on start of composition)<br>**desired:** the desired number of instances to run (used on start of composition) |
 | EC2 Instance | ec2_instance | **id:** the ID of the instance to control |
 | ECS Service | ecs_service | **cluster_name:** the name of the ECS cluster the task runs on<br>**desired:** the desired number of tasks (used on start of composition)<br>**name:** the name of the ECS task to control |
+| EFS Filesystem | efs_file_system | **id:** the ID of the filesystem to control<br>**provisioned_throughput_in_mibps:** the provisioned throughput of the filesystem (used on start of composition) |
 | FSX Windows Filesystem | fsx_windows_file_system | **id:** the ID of the filesystem to control<br>**throughput_capacity:** the throughput capacity of the filesystem (used on start of composition) |
 | RDS Cluster | rds_cluster | **id:** the ID of the cluster to control |
 | RDS Instance | rds_instance | **id:** the ID of the instance to control |
@@ -116,10 +119,10 @@ This module is extendable. To add support for more resources, follow these gener
     1. Make sure tests pass
 
 1. In the Terraform code
-    1. Add the resource to the resource_composition variable
-    1. Add validation to the resource_composition variable
-    1. Add an example
-    1. Update this README
+    1. Add the resource to the validations of the resource_composition variable
+    1. Add IAM permissions as a new dynamic block to the Lambda policy document
+    1. Add an example in the examples folder
+    1. Update this README (including the architecture image if required)
     1. Make sure validations pass
 
 <!-- BEGIN_TF_DOCS -->
