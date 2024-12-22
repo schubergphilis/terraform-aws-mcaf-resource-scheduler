@@ -9,7 +9,7 @@ It has the following high level architecture:
 
 ![Architecture](https://raw.githubusercontent.com/schubergphilis/terraform-aws-mcaf-resource-scheduler/main/docs/architecture.png)
 
-## Features
+## :books: Features
 
 ### Supported resource types
 
@@ -52,7 +52,7 @@ Optionally a pair of webhooks can be deployed to trigger starting or stopping an
 
 Webhooks require an API key and can be setup to only allow certain IP addresses. A POST request has to be made to one of the outputted endpoints to trigger a webhook.
 
-## Setup
+## :wrench: Setup
 
 To setup this module requires a composition of the resources that need to be managed. Based on that input, a state machine is generated. Be aware that the composition dictates order: the resources in the composition are controlled in that order when the composition is started. The order is reversed when the composition is stopped.
 
@@ -72,7 +72,7 @@ Resource types require certain parameters in order to function. It's recommended
 | RDS Instance | rds_instance | **id:** the ID of the instance to control |
 | Redshift Cluster | redshift_cluster | **id:** the ID of the cluster to control |
 
-## Limitations
+## :rotating_light: Limitations
 
 ### Schedule mixing
 
@@ -98,7 +98,7 @@ Throughput can't be changed until 6 hours after the last change was requested. A
 
 See https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-configuration.html#managing-storage-capacity for more information.
 
-## Development
+## :test_tube: Development
 
 This module uses the integrated Lambda to abstract some of the more complex functionality away. For redistribution purposes, the following dependencies have been vendorized:
 
