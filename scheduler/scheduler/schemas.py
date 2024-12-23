@@ -15,6 +15,7 @@ INPUT = {
                 "cron_helper",
                 "ec2_instance",
                 "ecs_service",
+                "efs_file_system",
                 "fsx_windows_file_system",
                 "rds_cluster",
                 "rds_instance",
@@ -84,6 +85,19 @@ INPUT = {
             "required": [
                 "id",
                 "throughput_capacity",
+            ],
+        },
+        "efs_file_system_params": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                },
+                "provisioned_throughput_in_mibps": {"type": "string"},
+            },
+            "required": [
+                "id",
+                "provisioned_throughput_in_mibps",
             ],
         },
     },

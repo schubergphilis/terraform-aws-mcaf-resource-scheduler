@@ -191,6 +191,23 @@ data "aws_iam_policy_document" "lambda_policy" {
       ]
     }
   }
+
+  dynamic "statement" {
+    for_each = contains(local.resource_types_in_composition, "efs_file_system") ? toset(["efs_file_system"]) : toset([])
+
+    content {
+      effect = "Allow"
+      actions = [
+        "elasticfilesystem:DescribeFileSystems",
+        "elasticfilesystem:UpdateFileSystem"
+      ]
+      resources = [
+        for resource in var.resource_composition :
+        "arn:aws:elasticfilesystem:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:file-system/${resource.params["id"]}"
+        if resource.type == "efs_file_system"
+      ]
+    }
+  }
 }
 
 module "lambda_role" {

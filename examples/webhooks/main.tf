@@ -13,6 +13,13 @@ module "scheduler" {
       }
     },
     {
+      "type" : "efs_file_system",
+      "params" : {
+        "id" : "efs-file-system-1",
+        "provisioned_throughput_in_mibps" : 128
+      }
+    },
+    {
       "type" : "wait",
       "params" : {
         "seconds" : 600

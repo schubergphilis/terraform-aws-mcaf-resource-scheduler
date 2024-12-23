@@ -11,7 +11,7 @@ variable "resource_composition" {
   description = "Resource composition"
 
   validation {
-    condition     = length([for r in var.resource_composition : r if contains(["ec2_instance", "rds_instance", "rds_cluster", "auto_scaling_group", "ecs_service", "redshift_cluster", "wait", "fsx_windows_file_system"], r.type)]) == length(var.resource_composition)
+    condition     = length([for r in var.resource_composition : r if contains(["ec2_instance", "rds_instance", "rds_cluster", "auto_scaling_group", "ecs_service", "redshift_cluster", "wait", "fsx_windows_file_system", "efs_file_system"], r.type)]) == length(var.resource_composition)
     error_message = "Resource type must be one of ec2_instance, rds_instance, rds_cluster, auto_scaling_group, ecs_service, redshift_cluster or fsx_windows_file_system"
   }
 
@@ -28,6 +28,11 @@ variable "resource_composition" {
   validation {
     condition     = !contains([for r in var.resource_composition : (r.type == "ecs_service" ? keys(r.params) == tolist(["cluster_name", "desired", "name"]) : true)], false)
     error_message = "ECS Service resources must have 'cluster_name', 'desired' and 'name' parameters"
+  }
+
+  validation {
+    condition     = !contains([for r in var.resource_composition : (r.type == "efs_file_system" ? keys(r.params) == tolist(["id", "provisioned_throughput_in_mibps"]) : true)], false)
+    error_message = "EFS Filesystem resources must have 'id' and 'provisioned_throughput_in_mibps' parameters"
   }
 
   validation {
