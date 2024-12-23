@@ -1,9 +1,11 @@
-# Resource Scheduler
+# :clock1: Resource Scheduler
 
 This composition scheduler can be used to schedule compositions with components that can be temporarily stopped, like EC2 instances, RDS instances/clusters and Redshift clusters. It's aimed at:
 
 * Environments that only run during office hours
 * Environments that only run on-demand
+
+Goal is to minimize cost; either by scaling resources to zero or to their most minimal configuration.
 
 It has the following high level architecture:
 
