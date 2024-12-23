@@ -66,8 +66,8 @@ Resource types require certain parameters in order to function. It's recommended
 | --- | --- | --- |
 | EC2 Auto-Scaling Group | auto_scaling_group | **name:** the name of the auto-scaling group to control<br>**min:** the minimal number of instances to run (used on start of composition)<br>**max:** the maximum number of instances to run, used on start of composition<br>**desired:** the desired number of instances to run, used on start of composition |
 | EC2 Instance | ec2_instance | **id:** the ID of the instance to control |
-| ECS Service | ecs_service | **cluster_name:** the name of the ECS cluster the task runs on<br>**desired:** the desired number of tasks, used on start of composition<br>**name:** the name of the ECS task to control |
-| FSX Windows Filesystem | fsx_windows_file_system | **id:** the ID of the filesystem to control<br>**throughput_capacity:** the throughput capacity of the filesystem, used on start of composition |
+| ECS Service | ecs_service | **cluster_name:** the name of the ECS cluster the task runs on<br>**desired:** the desired number of tasks (used on start of composition)<br>**name:** the name of the ECS task to control |
+| FSX Windows Filesystem | fsx_windows_file_system | **id:** the ID of the filesystem to control<br>**throughput_capacity:** the throughput capacity of the filesystem (used on start of composition) |
 | RDS Cluster | rds_cluster | **id:** the ID of the cluster to control |
 | RDS Instance | rds_instance | **id:** the ID of the instance to control |
 | Redshift Cluster | redshift_cluster | **id:** the ID of the cluster to control |
