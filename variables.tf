@@ -14,6 +14,46 @@ variable "resource_composition" {
     condition     = length([for r in var.resource_composition : r if contains(["ec2_instance", "rds_instance", "rds_cluster", "auto_scaling_group", "ecs_service", "redshift_cluster", "wait", "fsx_windows_file_system"], r.type)]) == length(var.resource_composition)
     error_message = "Resource type must be one of ec2_instance, rds_instance, rds_cluster, auto_scaling_group, ecs_service, redshift_cluster or fsx_windows_file_system"
   }
+
+  validation {
+    condition     = !contains([for r in var.resource_composition : (r.type == "auto_scaling_group" ? keys(r.params) == tolist(["desired", "max", "min", "name"]) : true)], false)
+    error_message = "Auto-scaling group resources must have 'desired', 'max', 'min' and 'name' parameters"
+  }
+
+  validation {
+    condition     = !contains([for r in var.resource_composition : (r.type == "ec2_instance" ? keys(r.params) == tolist(["id"]) : true)], false)
+    error_message = "EC2 instance resources must have 'id' parameter"
+  }
+
+  validation {
+    condition     = !contains([for r in var.resource_composition : (r.type == "ecs_service" ? keys(r.params) == tolist(["cluster_name", "desired", "name"]) : true)], false)
+    error_message = "ECS Service resources must have 'cluster_name', 'desired' and 'name' parameters"
+  }
+
+  validation {
+    condition     = !contains([for r in var.resource_composition : (r.type == "fsx_windows_file_system" ? keys(r.params) == tolist(["id", "throughput_capacity"]) : true)], false)
+    error_message = "FSx Windows Filesystem resources must have 'id' and 'throughput_capacity' parameters"
+  }
+
+  validation {
+    condition     = !contains([for r in var.resource_composition : (r.type == "rds_cluster" ? keys(r.params) == tolist(["id"]) : true)], false)
+    error_message = "RDS Cluster resources must have 'id' parameter"
+  }
+
+  validation {
+    condition     = !contains([for r in var.resource_composition : (r.type == "rds_instance" ? keys(r.params) == tolist(["id"]) : true)], false)
+    error_message = "RDS Instance resources must have 'id' parameter"
+  }
+
+  validation {
+    condition     = !contains([for r in var.resource_composition : (r.type == "redshift_cluster" ? keys(r.params) == tolist(["id"]) : true)], false)
+    error_message = "Redshift Cluster resources must have 'id' parameter"
+  }
+
+  validation {
+    condition     = !contains([for r in var.resource_composition : (r.type == "wait" ? keys(r.params) == tolist(["seconds"]) : true)], false)
+    error_message = "Wait instructions must have 'seconds' parameter"
+  }
 }
 
 variable "webhooks" {
@@ -27,7 +67,7 @@ variable "webhooks" {
     ip_whitelist = []
     private      = false
   }
-  description = "Deploy webhooks for external triggers"
+  description = "Deploy webhooks for external triggers from whitelisted IP CIDR's."
 }
 
 variable "composition_name" {

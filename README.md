@@ -9,7 +9,7 @@ It has the following high level architecture:
 
 ![Architecture](https://raw.githubusercontent.com/schubergphilis/terraform-aws-mcaf-resource-scheduler/main/docs/architecture.png)
 
-## Features
+## :books: Features
 
 ### Supported resource types
 
@@ -52,7 +52,27 @@ Optionally a pair of webhooks can be deployed to trigger starting or stopping an
 
 Webhooks require an API key and can be setup to only allow certain IP addresses. A POST request has to be made to one of the outputted endpoints to trigger a webhook.
 
-## Limitations
+## :wrench: Setup
+
+To setup this module requires a composition of the resources that need to be managed. Based on that input, a state machine is generated. Be aware that the composition dictates order: the resources in the composition are controlled in that order when the composition is started. The order is reversed when the composition is stopped.
+
+Please see the [examples](examples/) folder for code examples of how to implement this module.
+
+### Configuration
+
+Resource types require certain parameters in order to function. It's recommended to fill the parameters by refering to existing resources in your TF code.
+
+| Resource | Resource Type | Required Parameters |
+| --- | --- | --- |
+| EC2 Auto-Scaling Group | auto_scaling_group | **name:** the name of the auto-scaling group to control<br>**min:** the minimal number of instances to run (used on start of composition)<br>**max:** the maximum number of instances to run (used on start of composition)<br>**desired:** the desired number of instances to run (used on start of composition) |
+| EC2 Instance | ec2_instance | **id:** the ID of the instance to control |
+| ECS Service | ecs_service | **cluster_name:** the name of the ECS cluster the task runs on<br>**desired:** the desired number of tasks (used on start of composition)<br>**name:** the name of the ECS task to control |
+| FSX Windows Filesystem | fsx_windows_file_system | **id:** the ID of the filesystem to control<br>**throughput_capacity:** the throughput capacity of the filesystem (used on start of composition) |
+| RDS Cluster | rds_cluster | **id:** the ID of the cluster to control |
+| RDS Instance | rds_instance | **id:** the ID of the instance to control |
+| Redshift Cluster | redshift_cluster | **id:** the ID of the cluster to control |
+
+## :rotating_light: Limitations
 
 ### Schedule mixing
 
@@ -78,17 +98,29 @@ Throughput can't be changed until 6 hours after the last change was requested. A
 
 See https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-configuration.html#managing-storage-capacity for more information.
 
-## Setup
-
-To setup this module requires a composition of the resources that need to be managed. Based on that input, a state machine is generated.
-
-Please see the [examples](examples/) folder for code examples of how to implement this module.
-
-## Development
+## :test_tube: Development
 
 This module uses the integrated Lambda to abstract some of the more complex functionality away. For redistribution purposes, the following dependencies have been vendorized:
 
 * pyawscron 1.0.6: https://pypi.org/project/pyawscron/ - https://github.com/pitchblack408/pyawscron/tree/1.0.6
+
+### Adding support for more resources
+
+This module is extendable. To add support for more resources, follow these general steps:
+
+1. In the Lambda code
+    1. Add a test
+    1. Add the resource controller
+    1. Add the resource to the handler
+    1. Add the resource to the schema
+    1. Make sure tests pass
+
+1. In the Terraform code
+    1. Add the resource to the resource_composition variable
+    1. Add validation to the resource_composition variable
+    1. Add an example
+    1. Update this README
+    1. Make sure validations pass
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -182,7 +214,7 @@ This module uses the integrated Lambda to abstract some of the more complex func
 | <a name="input_stop_resources_at"></a> [stop\_resources\_at](#input\_stop\_resources\_at) | Resources stop cron expression in selected timezone | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Mapping of tags | `map(string)` | `{}` | no |
 | <a name="input_timezone"></a> [timezone](#input\_timezone) | Timezone to execute schedules in | `string` | `"UTC"` | no |
-| <a name="input_webhooks"></a> [webhooks](#input\_webhooks) | Deploy webhooks for external triggers | <pre>object({<br>    deploy       = bool<br>    ip_whitelist = list(string)<br>    private      = optional(bool, false)<br>  })</pre> | <pre>{<br>  "deploy": false,<br>  "ip_whitelist": [],<br>  "private": false<br>}</pre> | no |
+| <a name="input_webhooks"></a> [webhooks](#input\_webhooks) | Deploy webhooks for external triggers from whitelisted IP CIDR's. | <pre>object({<br>    deploy       = bool<br>    ip_whitelist = list(string)<br>    private      = optional(bool, false)<br>  })</pre> | <pre>{<br>  "deploy": false,<br>  "ip_whitelist": [],<br>  "private": false<br>}</pre> | no |
 
 ## Outputs
 

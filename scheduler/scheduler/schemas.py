@@ -55,10 +55,10 @@ INPUT = {
         "auto_scaling_group_params": {
             "type": "object",
             "properties": {
-                "name": {"type": "string"},
-                "min": {"type": "string"},
-                "max": {"type": "string"},
                 "desired": {"type": "string"},
+                "max": {"type": "string"},
+                "min": {"type": "string"},
+                "name": {"type": "string"},
             },
             "required": ["name", "min", "max", "desired"],
         },
@@ -68,8 +68,8 @@ INPUT = {
                 "cluster_name": {
                     "type": "string",
                 },
-                "name": {"type": "string"},
                 "desired": {"type": "string"},
+                "name": {"type": "string"},
             },
             "required": ["cluster_name", "name", "desired"],
         },
