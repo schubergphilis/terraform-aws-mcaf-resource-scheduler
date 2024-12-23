@@ -37,7 +37,7 @@ variable "resource_composition" {
 
   validation {
     condition     = !contains([for r in var.resource_composition : (r.type == "fsx_windows_file_system" ? keys(r.params) == tolist(["id", "throughput_capacity"]) : true)], false)
-    error_message = "FSx Windows Fileystem resources must have 'id' and 'throughput_capacity' parameters"
+    error_message = "FSx Windows Filesystem resources must have 'id' and 'throughput_capacity' parameters"
   }
 
   validation {
