@@ -1,11 +1,6 @@
 variable "kms_key_arn" {
   description = "The ARN of the KMS key to use with the Lambda function"
   type        = string
-
-  validation {
-    condition     = can(regex("arn:aws:kms:[a-z0-9-]+:[0-9]+:key/[a-f0-9-]+", var.kms_key_arn))
-    error_message = "KMS key ARN must be in the format arn:aws:kms:<region>:<account>:key/<key-id>"
-  }
 }
 
 variable "resource_composition" {
