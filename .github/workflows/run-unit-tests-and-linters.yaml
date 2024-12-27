@@ -1,0 +1,29 @@
+name: "run-unit-tests-and-linters"
+
+on:
+  pull_request:
+
+jobs:
+  run-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pipenv
+        working-directory: ./scheduler
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./scheduler
+        run: pipenv install --dev
+      - name: Run ruff checker
+        working-directory: ./scheduler
+        run: pipenv run ruff check --no-fix .
+      - name: Run ruff formatter
+        working-directory: ./scheduler
+        run: pipenv run ruff format --diff .
+      - name: Run unit tests
+        working-directory: ./scheduler
+        run: pipenv run pytest --cov-fail-under=95 --cov=scheduler tests/
