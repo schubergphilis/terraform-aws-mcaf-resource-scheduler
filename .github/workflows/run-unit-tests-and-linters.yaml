@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  run-unit-tests:
+  run-unit-tests-and-linters:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
