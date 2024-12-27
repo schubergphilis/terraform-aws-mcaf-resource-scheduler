@@ -147,11 +147,11 @@ This module is extendable. To add support for more resources, follow these gener
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_api_gateway_role"></a> [api\_gateway\_role](#module\_api\_gateway\_role) | github.com/schubergphilis/terraform-aws-mcaf-role | v0.3.3 |
-| <a name="module_eventbridge_scheduler_role"></a> [eventbridge\_scheduler\_role](#module\_eventbridge\_scheduler\_role) | github.com/schubergphilis/terraform-aws-mcaf-role | v0.3.3 |
-| <a name="module_lambda_role"></a> [lambda\_role](#module\_lambda\_role) | github.com/schubergphilis/terraform-aws-mcaf-role | v0.3.3 |
+| <a name="module_api_gateway_role"></a> [api\_gateway\_role](#module\_api\_gateway\_role) | schubergphilis/mcaf-role/aws | 0.4.0 |
+| <a name="module_eventbridge_scheduler_role"></a> [eventbridge\_scheduler\_role](#module\_eventbridge\_scheduler\_role) | schubergphilis/mcaf-role/aws | 0.4.0 |
+| <a name="module_lambda_role"></a> [lambda\_role](#module\_lambda\_role) | schubergphilis/mcaf-role/aws | 0.4.0 |
 | <a name="module_scheduler_lambda"></a> [scheduler\_lambda](#module\_scheduler\_lambda) | schubergphilis/mcaf-lambda/aws | ~> 1.1.2 |
-| <a name="module_step_functions_role"></a> [step\_functions\_role](#module\_step\_functions\_role) | github.com/schubergphilis/terraform-aws-mcaf-role | v0.3.3 |
+| <a name="module_step_functions_role"></a> [step\_functions\_role](#module\_step\_functions\_role) | schubergphilis/mcaf-role/aws | 0.4.0 |
 
 ## Resources
 
@@ -225,10 +225,11 @@ This module is extendable. To add support for more resources, follow these gener
 
 | Name | Description |
 |------|-------------|
-| <a name="output_api_gateway_stage_arn"></a> [api\_gateway\_stage\_arn](#output\_api\_gateway\_stage\_arn) | n/a |
-| <a name="output_start_composition_state_machine_arn"></a> [start\_composition\_state\_machine\_arn](#output\_start\_composition\_state\_machine\_arn) | n/a |
-| <a name="output_start_composition_webhook_url"></a> [start\_composition\_webhook\_url](#output\_start\_composition\_webhook\_url) | n/a |
-| <a name="output_stop_composition_state_machine_arn"></a> [stop\_composition\_state\_machine\_arn](#output\_stop\_composition\_state\_machine\_arn) | n/a |
-| <a name="output_stop_composition_webhook_url"></a> [stop\_composition\_webhook\_url](#output\_stop\_composition\_webhook\_url) | n/a |
-| <a name="output_webhook_api_key"></a> [webhook\_api\_key](#output\_webhook\_api\_key) | n/a |
+| <a name="output_api_gateway_id"></a> [api\_gateway\_id](#output\_api\_gateway\_id) | The ID of the API Gateway used by the webhooks (if webhooks are enabled) |
+| <a name="output_api_gateway_stage_arn"></a> [api\_gateway\_stage\_arn](#output\_api\_gateway\_stage\_arn) | The ARN of the API Gateway stage used by the webhooks (if webhooks are enabled) |
+| <a name="output_start_composition_state_machine_arn"></a> [start\_composition\_state\_machine\_arn](#output\_start\_composition\_state\_machine\_arn) | The ARN of the Step Functions state machine used to start the composition |
+| <a name="output_start_composition_webhook_url"></a> [start\_composition\_webhook\_url](#output\_start\_composition\_webhook\_url) | The webhook URL used to start the composition (if webhooks are enabled) |
+| <a name="output_stop_composition_state_machine_arn"></a> [stop\_composition\_state\_machine\_arn](#output\_stop\_composition\_state\_machine\_arn) | The ARN of the Step Functions state machine used to stop the composition |
+| <a name="output_stop_composition_webhook_url"></a> [stop\_composition\_webhook\_url](#output\_stop\_composition\_webhook\_url) | The webhook URL used to stop the composition (if webhooks are enabled) |
+| <a name="output_webhook_api_key"></a> [webhook\_api\_key](#output\_webhook\_api\_key) | The API key used to authenticate requests to any the webhooks (if webhooks are enabled) |
 <!-- END_TF_DOCS -->
