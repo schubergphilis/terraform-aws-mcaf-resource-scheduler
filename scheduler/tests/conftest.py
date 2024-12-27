@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
+
 @pytest.fixture
 def lambda_context():
     @dataclass

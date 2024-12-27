@@ -5,10 +5,10 @@ from scheduler.resource_controller import ResourceController
 
 FSX_MINIMAL_THROUGHPUT_CAPACITY = 32
 
-fsx = boto3.client("fsx")
-
 
 class FsxWindowsFileSystemController(ResourceController):
+    client = boto3.client("fsx")
+
     def __init__(
         self,
         id: str,
@@ -19,7 +19,7 @@ class FsxWindowsFileSystemController(ResourceController):
         self.throughput_capacity = int(throughput_capacity)
 
     def start(self) -> Tuple[bool, str]:
-        fsx.update_file_system(
+        self.client.update_file_system(
             FileSystemId=self.id,
             WindowsConfiguration={"ThroughputCapacity": self.throughput_capacity},
         )
@@ -29,7 +29,7 @@ class FsxWindowsFileSystemController(ResourceController):
         )
 
     def stop(self) -> Tuple[bool, str]:
-        fsx.update_file_system(
+        self.client.update_file_system(
             FileSystemId=self.id,
             WindowsConfiguration={
                 "ThroughputCapacity": FSX_MINIMAL_THROUGHPUT_CAPACITY

@@ -4,20 +4,20 @@ from typing import Tuple
 from botocore.exceptions import ClientError
 from scheduler.resource_controller import ResourceController
 
-rds = boto3.client("rds")
-
 
 class RdsInstanceController(ResourceController):
+    client = boto3.client("rds")
+
     def __init__(self, id: str):
         super().__init__()
         self.id = id
 
     def start(self) -> Tuple[bool, str]:
         try:
-            rds.start_db_instance(DBInstanceIdentifier=self.id)
+            self.client.start_db_instance(DBInstanceIdentifier=self.id)
             return (True, f"Instance {self.id} started successfully")
         except ClientError as err:
-            if err.response["Error"]["Code"] == "InvalidDBInstanceState":
+            if err.response["Error"]["Code"] == "InvalidDBInstanceStateFault":
                 return (
                     False,
                     f"Instance {self.id} is in an invalid state to be started",
@@ -27,10 +27,10 @@ class RdsInstanceController(ResourceController):
 
     def stop(self) -> Tuple[bool, str]:
         try:
-            rds.stop_db_instance(DBInstanceIdentifier=self.id)
+            self.client.stop_db_instance(DBInstanceIdentifier=self.id)
             return (True, f"Instance {self.id} stopped successfully")
         except ClientError as err:
-            if err.response["Error"]["Code"] == "InvalidDBInstanceState":
+            if err.response["Error"]["Code"] == "InvalidDBInstanceStateFault":
                 return (
                     False,
                     f"Instance {self.id} is in an invalid state to be stopped",

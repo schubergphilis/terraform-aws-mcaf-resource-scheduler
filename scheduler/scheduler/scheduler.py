@@ -5,7 +5,7 @@ from typing import Dict
 import scheduler.schemas as schemas
 from scheduler.cron_helper import extend_windows
 from scheduler.resource_controllers.auto_scaling_group_controller import (
-    AutoscalingGroupController,
+    AutoScalingGroupController,
 )
 from scheduler.resource_controllers.ec2_instance_controller import Ec2InstanceController
 from scheduler.resource_controllers.ecs_service_controller import EcsServiceController
@@ -45,9 +45,9 @@ def handler(event, _context) -> Dict:
         case ("ecs_service", "stop"):
             success, msg = EcsServiceController(**params).stop()
         case ("auto_scaling_group", "start"):
-            success, msg = AutoscalingGroupController(**params).start()
+            success, msg = AutoScalingGroupController(**params).start()
         case ("auto_scaling_group", "stop"):
-            success, msg = AutoscalingGroupController(**params).stop()
+            success, msg = AutoScalingGroupController(**params).stop()
         case ("ec2_instance", "start"):
             success, msg = Ec2InstanceController(**params).start()
         case ("ec2_instance", "stop"):

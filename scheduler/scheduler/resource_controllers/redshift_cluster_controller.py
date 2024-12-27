@@ -4,17 +4,17 @@ from typing import Tuple
 from botocore.exceptions import ClientError
 from scheduler.resource_controller import ResourceController
 
-redshift = boto3.client("redshift")
-
 
 class RedshiftClusterController(ResourceController):
+    client = boto3.client("redshift")
+
     def __init__(self, id: str):
         super().__init__()
         self.id = id
 
     def start(self) -> Tuple[bool, str]:
         try:
-            redshift.resume_cluster(ClusterIdentifier=self.id)
+            self.client.resume_cluster(ClusterIdentifier=self.id)
             return (True, f"Cluster {self.id} started successfully")
         except ClientError as err:
             if err.response["Error"]["Code"] == "InvalidClusterStateFault":
@@ -27,7 +27,7 @@ class RedshiftClusterController(ResourceController):
 
     def stop(self) -> Tuple[bool, str]:
         try:
-            redshift.pause_cluster(ClusterIdentifier=self.id)
+            self.client.pause_cluster(ClusterIdentifier=self.id)
             return (True, f"Cluster {self.id} stopped successfully")
         except ClientError as err:
             if err.response["Error"]["Code"] == "InvalidClusterStateFault":
