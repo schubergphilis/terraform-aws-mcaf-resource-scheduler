@@ -14,18 +14,7 @@ autoscaling_stubber = Stubber(autoscaling)
     "scheduler.resource_controllers.auto_scaling_group_controller.AutoScalingGroupController.client",
     autoscaling,
 )
-def test_scheduler_auto_scaling_group_start(lambda_context):
-    payload = {
-        "resource_type": "auto_scaling_group",
-        "action": "start",
-        "auto_scaling_group_params": {
-            "name": "asg-test",
-            "min": "1",
-            "max": "3",
-            "desired": "1",
-        },
-    }
-
+def test_scheduler_auto_scaling_group_start(lambda_context, auto_scaling_group_start):
     with autoscaling_stubber as stubbed:
         stubbed.add_response(
             "update_auto_scaling_group",
@@ -37,7 +26,7 @@ def test_scheduler_auto_scaling_group_start(lambda_context):
                 "DesiredCapacity": 1,
             },
         )
-        response = handler(payload, lambda_context)
+        response = handler(auto_scaling_group_start, lambda_context)
         assert response == {
             "success": True,
             "message": "Auto-Scaling Group asg-test started successfully",
@@ -48,18 +37,7 @@ def test_scheduler_auto_scaling_group_start(lambda_context):
     "scheduler.resource_controllers.auto_scaling_group_controller.AutoScalingGroupController.client",
     autoscaling,
 )
-def test_scheduler_auto_scaling_group_stop(lambda_context):
-    payload = {
-        "resource_type": "auto_scaling_group",
-        "action": "stop",
-        "auto_scaling_group_params": {
-            "name": "asg-test",
-            "min": "1",
-            "max": "3",
-            "desired": "1",
-        },
-    }
-
+def test_scheduler_auto_scaling_group_stop(lambda_context, auto_scaling_group_stop):
     with autoscaling_stubber as stubbed:
         stubbed.add_response(
             "update_auto_scaling_group",
@@ -71,7 +49,7 @@ def test_scheduler_auto_scaling_group_stop(lambda_context):
                 "DesiredCapacity": 0,
             },
         )
-        response = handler(payload, lambda_context)
+        response = handler(auto_scaling_group_stop, lambda_context)
         assert response == {
             "success": True,
             "message": "Auto-Scaling Group asg-test stopped successfully",

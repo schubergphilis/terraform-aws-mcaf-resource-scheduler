@@ -17,20 +17,14 @@ rds_stubber = Stubber(rds)
     "scheduler.resource_controllers.rds_cluster_controller.RdsClusterController.client",
     rds,
 )
-def test_scheduler_rds_cluster_start(lambda_context):
-    payload = {
-        "resource_type": "rds_cluster",
-        "action": "start",
-        "rds_cluster_params": {"id": "rds-cluster-test"},
-    }
-
+def test_scheduler_rds_cluster_start(lambda_context, rds_cluster_start):
     with rds_stubber as stubbed:
         stubbed.add_response(
             "start_db_cluster",
             {},
             {"DBClusterIdentifier": "rds-cluster-test"},
         )
-        response = handler(payload, lambda_context)
+        response = handler(rds_cluster_start, lambda_context)
         assert response == {
             "success": True,
             "message": "Cluster rds-cluster-test started successfully",
@@ -41,20 +35,14 @@ def test_scheduler_rds_cluster_start(lambda_context):
     "scheduler.resource_controllers.rds_cluster_controller.RdsClusterController.client",
     rds,
 )
-def test_scheduler_rds_cluster_stop(lambda_context):
-    payload = {
-        "resource_type": "rds_cluster",
-        "action": "stop",
-        "rds_cluster_params": {"id": "rds-cluster-test"},
-    }
-
+def test_scheduler_rds_cluster_stop(lambda_context, rds_cluster_stop):
     with rds_stubber as stubbed:
         stubbed.add_response(
             "stop_db_cluster",
             {},
             {"DBClusterIdentifier": "rds-cluster-test"},
         )
-        response = handler(payload, lambda_context)
+        response = handler(rds_cluster_stop, lambda_context)
         assert response == {
             "success": True,
             "message": "Cluster rds-cluster-test stopped successfully",
@@ -65,18 +53,14 @@ def test_scheduler_rds_cluster_stop(lambda_context):
     "scheduler.resource_controllers.rds_cluster_controller.RdsClusterController.client",
     rds,
 )
-def test_scheduler_skips_rds_cluster_start_on_invalid_cluster_state(lambda_context):
-    payload = {
-        "resource_type": "rds_cluster",
-        "action": "start",
-        "rds_cluster_params": {"id": "rds-cluster-test"},
-    }
-
+def test_scheduler_skips_rds_cluster_start_on_invalid_cluster_state(
+    lambda_context, rds_cluster_start
+):
     with rds_stubber as stubbed:
         stubbed.add_client_error(
             "start_db_cluster", service_error_code="InvalidDBClusterStateFault"
         )
-        response = handler(payload, lambda_context)
+        response = handler(rds_cluster_start, lambda_context)
         assert response == {
             "success": False,
             "message": "Cluster rds-cluster-test is in an invalid state to be started",
@@ -87,18 +71,14 @@ def test_scheduler_skips_rds_cluster_start_on_invalid_cluster_state(lambda_conte
     "scheduler.resource_controllers.rds_cluster_controller.RdsClusterController.client",
     rds,
 )
-def test_scheduler_skips_rds_cluster_stop_on_invalid_cluster_state(lambda_context):
-    payload = {
-        "resource_type": "rds_cluster",
-        "action": "stop",
-        "rds_cluster_params": {"id": "rds-cluster-test"},
-    }
-
+def test_scheduler_skips_rds_cluster_stop_on_invalid_cluster_state(
+    lambda_context, rds_cluster_stop
+):
     with rds_stubber as stubbed:
         stubbed.add_client_error(
             "stop_db_cluster", service_error_code="InvalidDBClusterStateFault"
         )
-        response = handler(payload, lambda_context)
+        response = handler(rds_cluster_stop, lambda_context)
         assert response == {
             "success": False,
             "message": "Cluster rds-cluster-test is in an invalid state to be stopped",
@@ -110,20 +90,14 @@ def test_scheduler_skips_rds_cluster_stop_on_invalid_cluster_state(lambda_contex
     rds,
 )
 def test_scheduler_rds_cluster_start_on_non_existing_cluster_raises_error(
-    lambda_context,
+    lambda_context, rds_cluster_start
 ):
-    payload = {
-        "resource_type": "rds_cluster",
-        "action": "start",
-        "rds_cluster_params": {"id": "rds-cluster-test"},
-    }
-
     with pytest.raises(ClientError):
         with rds_stubber as stubbed:
             stubbed.add_client_error(
                 "start_db_cluster", service_error_code="DBClusterNotFoundFault"
             )
-            handler(payload, lambda_context)
+            handler(rds_cluster_start, lambda_context)
 
 
 @patch(
@@ -131,17 +105,11 @@ def test_scheduler_rds_cluster_start_on_non_existing_cluster_raises_error(
     rds,
 )
 def test_scheduler_rds_cluster_stop_on_non_existing_cluster_raises_error(
-    lambda_context,
+    lambda_context, rds_cluster_stop
 ):
-    payload = {
-        "resource_type": "rds_cluster",
-        "action": "stop",
-        "rds_cluster_params": {"id": "rds-cluster-test"},
-    }
-
     with pytest.raises(ClientError):
         with rds_stubber as stubbed:
             stubbed.add_client_error(
                 "stop_db_cluster", service_error_code="DBClusterNotFoundFault"
             )
-            handler(payload, lambda_context)
+            handler(rds_cluster_stop, lambda_context)

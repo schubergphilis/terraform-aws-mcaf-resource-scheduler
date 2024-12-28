@@ -14,16 +14,9 @@ fsx_stubber = Stubber(fsx)
     "scheduler.resource_controllers.fsx_windows_file_system_controller.FsxWindowsFileSystemController.client",
     fsx,
 )
-def test_scheduler_fsx_windows_file_system_start(lambda_context):
-    payload = {
-        "resource_type": "fsx_windows_file_system",
-        "action": "start",
-        "fsx_windows_file_system_params": {
-            "id": "fs-1234567890",
-            "throughput_capacity": "512",
-        },
-    }
-
+def test_scheduler_fsx_windows_file_system_start(
+    lambda_context, fsx_windows_file_system_start
+):
     with fsx_stubber as stubbed:
         stubbed.add_response(
             "update_file_system",
@@ -33,7 +26,7 @@ def test_scheduler_fsx_windows_file_system_start(lambda_context):
                 "WindowsConfiguration": {"ThroughputCapacity": 512},
             },
         )
-        response = handler(payload, lambda_context)
+        response = handler(fsx_windows_file_system_start, lambda_context)
         assert response == {
             "success": True,
             "message": "Throughput capacity for fs-1234567890 started adjustment to 512 MB/s",
@@ -44,16 +37,9 @@ def test_scheduler_fsx_windows_file_system_start(lambda_context):
     "scheduler.resource_controllers.fsx_windows_file_system_controller.FsxWindowsFileSystemController.client",
     fsx,
 )
-def test_scheduler_fsx_windows_file_system_stop(lambda_context):
-    payload = {
-        "resource_type": "fsx_windows_file_system",
-        "action": "stop",
-        "fsx_windows_file_system_params": {
-            "id": "fs-1234567890",
-            "throughput_capacity": "512",
-        },
-    }
-
+def test_scheduler_fsx_windows_file_system_stop(
+    lambda_context, fsx_windows_file_system_stop
+):
     with fsx_stubber as stubbed:
         stubbed.add_response(
             "update_file_system",
@@ -63,7 +49,7 @@ def test_scheduler_fsx_windows_file_system_stop(lambda_context):
                 "WindowsConfiguration": {"ThroughputCapacity": 32},
             },
         )
-        response = handler(payload, lambda_context)
+        response = handler(fsx_windows_file_system_stop, lambda_context)
         assert response == {
             "success": True,
             "message": "Throughput capacity for fs-1234567890 started adjustment to 32 MB/s",

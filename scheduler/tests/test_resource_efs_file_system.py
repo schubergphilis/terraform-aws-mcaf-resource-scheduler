@@ -14,16 +14,7 @@ efs_stubber = Stubber(efs)
     "scheduler.resource_controllers.efs_file_system_controller.EfsFileSystemController.client",
     efs,
 )
-def test_scheduler_efs_file_system_start(lambda_context):
-    payload = {
-        "resource_type": "efs_file_system",
-        "action": "start",
-        "efs_file_system_params": {
-            "id": "fs-1234567890",
-            "provisioned_throughput_in_mibps": "128",
-        },
-    }
-
+def test_scheduler_efs_file_system_start(lambda_context, efs_file_system_start):
     with efs_stubber as stubbed:
         stubbed.add_response(
             "describe_file_systems",
@@ -69,7 +60,7 @@ def test_scheduler_efs_file_system_start(lambda_context):
                 "ProvisionedThroughputInMibps": 128.0,
             },
         )
-        response = handler(payload, lambda_context)
+        response = handler(efs_file_system_start, lambda_context)
         assert response == {
             "success": True,
             "message": "Throughput capacity for fs-1234567890 adjusted to 128.0 MB/s",
@@ -80,16 +71,7 @@ def test_scheduler_efs_file_system_start(lambda_context):
     "scheduler.resource_controllers.efs_file_system_controller.EfsFileSystemController.client",
     efs,
 )
-def test_scheduler_efs_file_system_stop(lambda_context):
-    payload = {
-        "resource_type": "efs_file_system",
-        "action": "stop",
-        "efs_file_system_params": {
-            "id": "fs-1234567890",
-            "provisioned_throughput_in_mibps": "128",
-        },
-    }
-
+def test_scheduler_efs_file_system_stop(lambda_context, efs_file_system_stop):
     with efs_stubber as stubbed:
         stubbed.add_response(
             "describe_file_systems",
@@ -135,7 +117,7 @@ def test_scheduler_efs_file_system_stop(lambda_context):
                 "ProvisionedThroughputInMibps": 1.0,
             },
         )
-        response = handler(payload, lambda_context)
+        response = handler(efs_file_system_stop, lambda_context)
         assert response == {
             "success": True,
             "message": "Throughput capacity for fs-1234567890 adjusted to 1.0 MB/s",
@@ -147,17 +129,8 @@ def test_scheduler_efs_file_system_stop(lambda_context):
     efs,
 )
 def test_scheduler_skips_efs_file_system_start_if_no_provisioned_throughput_mode(
-    lambda_context,
+    lambda_context, efs_file_system_start
 ):
-    payload = {
-        "resource_type": "efs_file_system",
-        "action": "start",
-        "efs_file_system_params": {
-            "id": "fs-1234567890",
-            "provisioned_throughput_in_mibps": "128",
-        },
-    }
-
     with efs_stubber as stubbed:
         stubbed.add_response(
             "describe_file_systems",
@@ -183,7 +156,7 @@ def test_scheduler_skips_efs_file_system_start_if_no_provisioned_throughput_mode
             },
             {"FileSystemId": "fs-1234567890"},
         )
-        response = handler(payload, lambda_context)
+        response = handler(efs_file_system_start, lambda_context)
         assert response == {
             "success": False,
             "message": "EFS Filesystem fs-1234567890 is not in provisioned throughput mode",
@@ -195,17 +168,8 @@ def test_scheduler_skips_efs_file_system_start_if_no_provisioned_throughput_mode
     efs,
 )
 def test_scheduler_skips_efs_file_system_stop_if_no_provisioned_throughput_mode(
-    lambda_context,
+    lambda_context, efs_file_system_stop
 ):
-    payload = {
-        "resource_type": "efs_file_system",
-        "action": "stop",
-        "efs_file_system_params": {
-            "id": "fs-1234567890",
-            "provisioned_throughput_in_mibps": "128",
-        },
-    }
-
     with efs_stubber as stubbed:
         stubbed.add_response(
             "describe_file_systems",
@@ -231,7 +195,7 @@ def test_scheduler_skips_efs_file_system_stop_if_no_provisioned_throughput_mode(
             },
             {"FileSystemId": "fs-1234567890"},
         )
-        response = handler(payload, lambda_context)
+        response = handler(efs_file_system_stop, lambda_context)
         assert response == {
             "success": False,
             "message": "EFS Filesystem fs-1234567890 is not in provisioned throughput mode",
