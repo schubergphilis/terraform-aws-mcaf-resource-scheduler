@@ -5,7 +5,7 @@ from scheduler.resource_controller import ResourceController
 
 
 class AutoScalingGroupController(ResourceController):
-    client = boto3.client("autoscaling")
+    client = boto3.client('autoscaling')
 
     def __init__(self, name: str, min: str, max: str, desired: str):
         super().__init__()
@@ -21,10 +21,8 @@ class AutoScalingGroupController(ResourceController):
             MaxSize=self.max,
             DesiredCapacity=self.desired,
         )
-        return (True, f"Auto-Scaling Group {self.name} started successfully")
+        return (True, f'Auto-Scaling Group {self.name} started successfully')
 
     def stop(self) -> Tuple[bool, str]:
-        self.client.update_auto_scaling_group(
-            AutoScalingGroupName=self.name, MinSize=0, MaxSize=0, DesiredCapacity=0
-        )
-        return (True, f"Auto-Scaling Group {self.name} stopped successfully")
+        self.client.update_auto_scaling_group(AutoScalingGroupName=self.name, MinSize=0, MaxSize=0, DesiredCapacity=0)
+        return (True, f'Auto-Scaling Group {self.name} stopped successfully')

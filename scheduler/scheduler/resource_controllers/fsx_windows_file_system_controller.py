@@ -7,7 +7,7 @@ FSX_MINIMAL_THROUGHPUT_CAPACITY = 32
 
 
 class FsxWindowsFileSystemController(ResourceController):
-    client = boto3.client("fsx")
+    client = boto3.client('fsx')
 
     def __init__(
         self,
@@ -21,21 +21,19 @@ class FsxWindowsFileSystemController(ResourceController):
     def start(self) -> Tuple[bool, str]:
         self.client.update_file_system(
             FileSystemId=self.id,
-            WindowsConfiguration={"ThroughputCapacity": self.throughput_capacity},
+            WindowsConfiguration={'ThroughputCapacity': self.throughput_capacity},
         )
         return (
             True,
-            f"Throughput capacity for {self.id} started adjustment to {self.throughput_capacity} MB/s",
+            f'Throughput capacity for {self.id} started adjustment to {self.throughput_capacity} MB/s',
         )
 
     def stop(self) -> Tuple[bool, str]:
         self.client.update_file_system(
             FileSystemId=self.id,
-            WindowsConfiguration={
-                "ThroughputCapacity": FSX_MINIMAL_THROUGHPUT_CAPACITY
-            },
+            WindowsConfiguration={'ThroughputCapacity': FSX_MINIMAL_THROUGHPUT_CAPACITY},
         )
         return (
             True,
-            f"Throughput capacity for {self.id} started adjustment to {FSX_MINIMAL_THROUGHPUT_CAPACITY} MB/s",
+            f'Throughput capacity for {self.id} started adjustment to {FSX_MINIMAL_THROUGHPUT_CAPACITY} MB/s',
         )

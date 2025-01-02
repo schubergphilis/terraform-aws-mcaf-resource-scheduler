@@ -6,7 +6,7 @@ from scheduler.resource_controller import ResourceController
 
 
 class RdsClusterController(ResourceController):
-    client = boto3.client("rds")
+    client = boto3.client('rds')
 
     def __init__(self, id: str):
         super().__init__()
@@ -15,12 +15,12 @@ class RdsClusterController(ResourceController):
     def start(self) -> Tuple[bool, str]:
         try:
             self.client.start_db_cluster(DBClusterIdentifier=self.id)
-            return (True, f"Cluster {self.id} started successfully")
+            return (True, f'Cluster {self.id} started successfully')
         except ClientError as err:
-            if err.response["Error"]["Code"] == "InvalidDBClusterStateFault":
+            if err.response['Error']['Code'] == 'InvalidDBClusterStateFault':
                 return (
                     False,
-                    f"Cluster {self.id} is in an invalid state to be started",
+                    f'Cluster {self.id} is in an invalid state to be started',
                 )
             else:
                 raise err
@@ -28,12 +28,12 @@ class RdsClusterController(ResourceController):
     def stop(self) -> Tuple[bool, str]:
         try:
             self.client.stop_db_cluster(DBClusterIdentifier=self.id)
-            return (True, f"Cluster {self.id} stopped successfully")
+            return (True, f'Cluster {self.id} stopped successfully')
         except ClientError as err:
-            if err.response["Error"]["Code"] == "InvalidDBClusterStateFault":
+            if err.response['Error']['Code'] == 'InvalidDBClusterStateFault':
                 return (
                     False,
-                    f"Cluster {self.id} is in an invalid state to be stopped",
+                    f'Cluster {self.id} is in an invalid state to be stopped',
                 )
             else:
                 raise err

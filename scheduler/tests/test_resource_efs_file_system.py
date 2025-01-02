@@ -6,197 +6,193 @@ from botocore.stub import Stubber
 
 from scheduler.scheduler import handler
 
-efs = botocore.session.get_session().create_client("efs")
+efs = botocore.session.get_session().create_client('efs')
 efs_stubber = Stubber(efs)
 
 
 @patch(
-    "scheduler.resource_controllers.efs_file_system_controller.EfsFileSystemController.client",
+    'scheduler.resource_controllers.efs_file_system_controller.EfsFileSystemController.client',
     efs,
 )
 def test_scheduler_efs_file_system_start(lambda_context, efs_file_system_start):
     with efs_stubber as stubbed:
         stubbed.add_response(
-            "describe_file_systems",
+            'describe_file_systems',
             {
-                "FileSystems": [
+                'FileSystems': [
                     {
-                        "FileSystemId": "fs-1234567890",
-                        "ThroughputMode": "provisioned",
-                        "OwnerId": "1234567890",
-                        "CreationToken": "foo",
-                        "CreationTime": "2021-01-01T00:00:00Z",
-                        "LifeCycleState": "available",
-                        "NumberOfMountTargets": 1,
-                        "SizeInBytes": {
-                            "Value": 0,
-                            "ValueInIA": 0,
-                            "ValueInStandard": 0,
+                        'FileSystemId': 'fs-1234567890',
+                        'ThroughputMode': 'provisioned',
+                        'OwnerId': '1234567890',
+                        'CreationToken': 'foo',
+                        'CreationTime': '2021-01-01T00:00:00Z',
+                        'LifeCycleState': 'available',
+                        'NumberOfMountTargets': 1,
+                        'SizeInBytes': {
+                            'Value': 0,
+                            'ValueInIA': 0,
+                            'ValueInStandard': 0,
                         },
-                        "PerformanceMode": "generalPurpose",
-                        "Tags": [{"Key": "Name", "Value": "bar"}],
+                        'PerformanceMode': 'generalPurpose',
+                        'Tags': [{'Key': 'Name', 'Value': 'bar'}],
                     }
                 ]
             },
-            {"FileSystemId": "fs-1234567890"},
+            {'FileSystemId': 'fs-1234567890'},
         )
         stubbed.add_response(
-            "update_file_system",
+            'update_file_system',
             {
-                "FileSystemId": "fs-1234567890",
-                "ThroughputMode": "provisioned",
-                "OwnerId": "1234567890",
-                "CreationToken": "foo",
-                "CreationTime": "2021-01-01T00:00:00Z",
-                "LifeCycleState": "available",
-                "NumberOfMountTargets": 1,
-                "SizeInBytes": {"Value": 0, "ValueInIA": 0, "ValueInStandard": 0},
-                "PerformanceMode": "generalPurpose",
-                "Tags": [{"Key": "Name", "Value": "bar"}],
+                'FileSystemId': 'fs-1234567890',
+                'ThroughputMode': 'provisioned',
+                'OwnerId': '1234567890',
+                'CreationToken': 'foo',
+                'CreationTime': '2021-01-01T00:00:00Z',
+                'LifeCycleState': 'available',
+                'NumberOfMountTargets': 1,
+                'SizeInBytes': {'Value': 0, 'ValueInIA': 0, 'ValueInStandard': 0},
+                'PerformanceMode': 'generalPurpose',
+                'Tags': [{'Key': 'Name', 'Value': 'bar'}],
             },
             {
-                "FileSystemId": "fs-1234567890",
-                "ThroughputMode": "provisioned",
-                "ProvisionedThroughputInMibps": 128.0,
+                'FileSystemId': 'fs-1234567890',
+                'ThroughputMode': 'provisioned',
+                'ProvisionedThroughputInMibps': 128.0,
             },
         )
         response = handler(efs_file_system_start, lambda_context)
         assert response == {
-            "success": True,
-            "message": "Throughput capacity for fs-1234567890 adjusted to 128.0 MB/s",
+            'success': True,
+            'message': 'Throughput capacity for fs-1234567890 adjusted to 128.0 MB/s',
         }
 
 
 @patch(
-    "scheduler.resource_controllers.efs_file_system_controller.EfsFileSystemController.client",
+    'scheduler.resource_controllers.efs_file_system_controller.EfsFileSystemController.client',
     efs,
 )
 def test_scheduler_efs_file_system_stop(lambda_context, efs_file_system_stop):
     with efs_stubber as stubbed:
         stubbed.add_response(
-            "describe_file_systems",
+            'describe_file_systems',
             {
-                "FileSystems": [
+                'FileSystems': [
                     {
-                        "FileSystemId": "fs-1234567890",
-                        "ThroughputMode": "provisioned",
-                        "OwnerId": "1234567890",
-                        "CreationToken": "foo",
-                        "CreationTime": "2021-01-01T00:00:00Z",
-                        "LifeCycleState": "available",
-                        "NumberOfMountTargets": 1,
-                        "SizeInBytes": {
-                            "Value": 0,
-                            "ValueInIA": 0,
-                            "ValueInStandard": 0,
+                        'FileSystemId': 'fs-1234567890',
+                        'ThroughputMode': 'provisioned',
+                        'OwnerId': '1234567890',
+                        'CreationToken': 'foo',
+                        'CreationTime': '2021-01-01T00:00:00Z',
+                        'LifeCycleState': 'available',
+                        'NumberOfMountTargets': 1,
+                        'SizeInBytes': {
+                            'Value': 0,
+                            'ValueInIA': 0,
+                            'ValueInStandard': 0,
                         },
-                        "PerformanceMode": "generalPurpose",
-                        "Tags": [{"Key": "Name", "Value": "bar"}],
+                        'PerformanceMode': 'generalPurpose',
+                        'Tags': [{'Key': 'Name', 'Value': 'bar'}],
                     }
                 ]
             },
-            {"FileSystemId": "fs-1234567890"},
+            {'FileSystemId': 'fs-1234567890'},
         )
         stubbed.add_response(
-            "update_file_system",
+            'update_file_system',
             {
-                "FileSystemId": "fs-1234567890",
-                "ThroughputMode": "provisioned",
-                "OwnerId": "1234567890",
-                "CreationToken": "foo",
-                "CreationTime": "2021-01-01T00:00:00Z",
-                "LifeCycleState": "available",
-                "NumberOfMountTargets": 1,
-                "SizeInBytes": {"Value": 0, "ValueInIA": 0, "ValueInStandard": 0},
-                "PerformanceMode": "generalPurpose",
-                "Tags": [{"Key": "Name", "Value": "bar"}],
+                'FileSystemId': 'fs-1234567890',
+                'ThroughputMode': 'provisioned',
+                'OwnerId': '1234567890',
+                'CreationToken': 'foo',
+                'CreationTime': '2021-01-01T00:00:00Z',
+                'LifeCycleState': 'available',
+                'NumberOfMountTargets': 1,
+                'SizeInBytes': {'Value': 0, 'ValueInIA': 0, 'ValueInStandard': 0},
+                'PerformanceMode': 'generalPurpose',
+                'Tags': [{'Key': 'Name', 'Value': 'bar'}],
             },
             {
-                "FileSystemId": "fs-1234567890",
-                "ThroughputMode": "provisioned",
-                "ProvisionedThroughputInMibps": 1.0,
+                'FileSystemId': 'fs-1234567890',
+                'ThroughputMode': 'provisioned',
+                'ProvisionedThroughputInMibps': 1.0,
             },
         )
         response = handler(efs_file_system_stop, lambda_context)
         assert response == {
-            "success": True,
-            "message": "Throughput capacity for fs-1234567890 adjusted to 1.0 MB/s",
+            'success': True,
+            'message': 'Throughput capacity for fs-1234567890 adjusted to 1.0 MB/s',
         }
 
 
 @patch(
-    "scheduler.resource_controllers.efs_file_system_controller.EfsFileSystemController.client",
+    'scheduler.resource_controllers.efs_file_system_controller.EfsFileSystemController.client',
     efs,
 )
-def test_scheduler_skips_efs_file_system_start_if_no_provisioned_throughput_mode(
-    lambda_context, efs_file_system_start
-):
+def test_scheduler_skips_efs_file_system_start_if_no_provisioned_throughput_mode(lambda_context, efs_file_system_start):
     with efs_stubber as stubbed:
         stubbed.add_response(
-            "describe_file_systems",
+            'describe_file_systems',
             {
-                "FileSystems": [
+                'FileSystems': [
                     {
-                        "FileSystemId": "fs-1234567890",
-                        "ThroughputMode": "elastic",
-                        "OwnerId": "1234567890",
-                        "CreationToken": "foo",
-                        "CreationTime": "2021-01-01T00:00:00Z",
-                        "LifeCycleState": "available",
-                        "NumberOfMountTargets": 1,
-                        "SizeInBytes": {
-                            "Value": 0,
-                            "ValueInIA": 0,
-                            "ValueInStandard": 0,
+                        'FileSystemId': 'fs-1234567890',
+                        'ThroughputMode': 'elastic',
+                        'OwnerId': '1234567890',
+                        'CreationToken': 'foo',
+                        'CreationTime': '2021-01-01T00:00:00Z',
+                        'LifeCycleState': 'available',
+                        'NumberOfMountTargets': 1,
+                        'SizeInBytes': {
+                            'Value': 0,
+                            'ValueInIA': 0,
+                            'ValueInStandard': 0,
                         },
-                        "PerformanceMode": "generalPurpose",
-                        "Tags": [{"Key": "Name", "Value": "bar"}],
+                        'PerformanceMode': 'generalPurpose',
+                        'Tags': [{'Key': 'Name', 'Value': 'bar'}],
                     }
                 ]
             },
-            {"FileSystemId": "fs-1234567890"},
+            {'FileSystemId': 'fs-1234567890'},
         )
         response = handler(efs_file_system_start, lambda_context)
         assert response == {
-            "success": False,
-            "message": "EFS Filesystem fs-1234567890 is not in provisioned throughput mode",
+            'success': False,
+            'message': 'EFS Filesystem fs-1234567890 is not in provisioned throughput mode',
         }
 
 
 @patch(
-    "scheduler.resource_controllers.efs_file_system_controller.EfsFileSystemController.client",
+    'scheduler.resource_controllers.efs_file_system_controller.EfsFileSystemController.client',
     efs,
 )
-def test_scheduler_skips_efs_file_system_stop_if_no_provisioned_throughput_mode(
-    lambda_context, efs_file_system_stop
-):
+def test_scheduler_skips_efs_file_system_stop_if_no_provisioned_throughput_mode(lambda_context, efs_file_system_stop):
     with efs_stubber as stubbed:
         stubbed.add_response(
-            "describe_file_systems",
+            'describe_file_systems',
             {
-                "FileSystems": [
+                'FileSystems': [
                     {
-                        "FileSystemId": "fs-1234567890",
-                        "ThroughputMode": "elastic",
-                        "OwnerId": "1234567890",
-                        "CreationToken": "foo",
-                        "CreationTime": "2021-01-01T00:00:00Z",
-                        "LifeCycleState": "available",
-                        "NumberOfMountTargets": 1,
-                        "SizeInBytes": {
-                            "Value": 0,
-                            "ValueInIA": 0,
-                            "ValueInStandard": 0,
+                        'FileSystemId': 'fs-1234567890',
+                        'ThroughputMode': 'elastic',
+                        'OwnerId': '1234567890',
+                        'CreationToken': 'foo',
+                        'CreationTime': '2021-01-01T00:00:00Z',
+                        'LifeCycleState': 'available',
+                        'NumberOfMountTargets': 1,
+                        'SizeInBytes': {
+                            'Value': 0,
+                            'ValueInIA': 0,
+                            'ValueInStandard': 0,
                         },
-                        "PerformanceMode": "generalPurpose",
-                        "Tags": [{"Key": "Name", "Value": "bar"}],
+                        'PerformanceMode': 'generalPurpose',
+                        'Tags': [{'Key': 'Name', 'Value': 'bar'}],
                     }
                 ]
             },
-            {"FileSystemId": "fs-1234567890"},
+            {'FileSystemId': 'fs-1234567890'},
         )
         response = handler(efs_file_system_stop, lambda_context)
         assert response == {
-            "success": False,
-            "message": "EFS Filesystem fs-1234567890 is not in provisioned throughput mode",
+            'success': False,
+            'message': 'EFS Filesystem fs-1234567890 is not in provisioned throughput mode',
         }
