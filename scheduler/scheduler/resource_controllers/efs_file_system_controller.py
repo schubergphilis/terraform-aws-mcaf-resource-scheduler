@@ -7,7 +7,7 @@ EFS_MINIMAL_THROUGHPUT_CAPACITY = 1.0
 
 
 class EfsFileSystemController(ResourceController):
-    client = boto3.client("ecs")
+    client = boto3.client("efs")
 
     def __init__(
         self,

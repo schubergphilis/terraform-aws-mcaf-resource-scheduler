@@ -1,10 +1,10 @@
-name: "run-unit-tests-and-linters"
+name: "python-unit-tests-and-linters"
 
 on:
   pull_request:
 
 jobs:
-  run-unit-tests-and-linters:
+  python-unit-tests-and-linters:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

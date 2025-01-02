@@ -1,1 +1,12 @@
 exclude = ["scheduler/_vendor/"]
+
+line-length = 121
+indent-width = 4
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+
+[format]
+quote-style = "single"
+indent-style = "space"
+line-ending = "auto"
