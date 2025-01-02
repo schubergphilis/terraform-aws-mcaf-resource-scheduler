@@ -1,0 +1,6 @@
+[run]
+branch = True
+include =
+    scheduler/*
+omit =
+    scheduler/_vendor/*

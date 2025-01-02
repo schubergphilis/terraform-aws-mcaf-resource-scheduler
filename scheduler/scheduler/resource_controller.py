@@ -8,9 +8,7 @@ class ResourceController(ABC):
         self.logger = Logger()
 
     def start(self):
-        raise NotImplementedError(
-            "This resource type has no start command implemented."
-        )
+        raise NotImplementedError('This resource type has no start command implemented.')
 
     def stop(self):
-        raise NotImplementedError("This resource type has no stop command implemented.")
+        raise NotImplementedError('This resource type has no stop command implemented.')

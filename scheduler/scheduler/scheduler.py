@@ -5,7 +5,7 @@ from typing import Dict
 import scheduler.schemas as schemas
 from scheduler.cron_helper import extend_windows
 from scheduler.resource_controllers.auto_scaling_group_controller import (
-    AutoscalingGroupController,
+    AutoScalingGroupController,
 )
 from scheduler.resource_controllers.ec2_instance_controller import Ec2InstanceController
 from scheduler.resource_controllers.ecs_service_controller import EcsServiceController
@@ -27,50 +27,50 @@ logger = Logger()
 @logger.inject_lambda_context(log_event=True)
 @validator(inbound_schema=schemas.INPUT, outbound_schema=schemas.OUTPUT)
 def handler(event, _context) -> Dict:
-    resource_action = (event["resource_type"], event["action"])
+    resource_action = (event['resource_type'], event['action'])
     params = event[f"{event['resource_type']}_params"]
 
-    success, msg = (False, "Unknown resource action")
+    success, msg = (False, 'Unknown resource action')
     match resource_action:
-        case ("cron_helper", "extend_windows"):
+        case ('cron_helper', 'extend_windows'):
             extended_windows = extend_windows(**params)
             return {
-                "start": extended_windows[0],
-                "stop": extended_windows[1],
-                "skip_start": extended_windows[2],
-                "skip_stop": extended_windows[3],
+                'start': extended_windows[0],
+                'stop': extended_windows[1],
+                'skip_start': extended_windows[2],
+                'skip_stop': extended_windows[3],
             }
-        case ("ecs_service", "start"):
+        case ('ecs_service', 'start'):
             success, msg = EcsServiceController(**params).start()
-        case ("ecs_service", "stop"):
+        case ('ecs_service', 'stop'):
             success, msg = EcsServiceController(**params).stop()
-        case ("auto_scaling_group", "start"):
-            success, msg = AutoscalingGroupController(**params).start()
-        case ("auto_scaling_group", "stop"):
-            success, msg = AutoscalingGroupController(**params).stop()
-        case ("ec2_instance", "start"):
+        case ('auto_scaling_group', 'start'):
+            success, msg = AutoScalingGroupController(**params).start()
+        case ('auto_scaling_group', 'stop'):
+            success, msg = AutoScalingGroupController(**params).stop()
+        case ('ec2_instance', 'start'):
             success, msg = Ec2InstanceController(**params).start()
-        case ("ec2_instance", "stop"):
+        case ('ec2_instance', 'stop'):
             success, msg = Ec2InstanceController(**params).stop()
-        case ("rds_cluster", "start"):
+        case ('rds_cluster', 'start'):
             success, msg = RdsClusterController(**params).start()
-        case ("rds_cluster", "stop"):
+        case ('rds_cluster', 'stop'):
             success, msg = RdsClusterController(**params).stop()
-        case ("rds_instance", "start"):
+        case ('rds_instance', 'start'):
             success, msg = RdsInstanceController(**params).start()
-        case ("rds_instance", "stop"):
+        case ('rds_instance', 'stop'):
             success, msg = RdsInstanceController(**params).stop()
-        case ("redshift_cluster", "start"):
+        case ('redshift_cluster', 'start'):
             success, msg = RedshiftClusterController(**params).start()
-        case ("redshift_cluster", "stop"):
+        case ('redshift_cluster', 'stop'):
             success, msg = RedshiftClusterController(**params).stop()
-        case ("fsx_windows_file_system", "start"):
+        case ('fsx_windows_file_system', 'start'):
             success, msg = FsxWindowsFileSystemController(**params).start()
-        case ("fsx_windows_file_system", "stop"):
+        case ('fsx_windows_file_system', 'stop'):
             success, msg = FsxWindowsFileSystemController(**params).stop()
-        case ("efs_file_system", "start"):
+        case ('efs_file_system', 'start'):
             success, msg = EfsFileSystemController(**params).start()
-        case ("efs_file_system", "stop"):
+        case ('efs_file_system', 'stop'):
             success, msg = EfsFileSystemController(**params).stop()
 
     if success:
@@ -78,4 +78,4 @@ def handler(event, _context) -> Dict:
     else:
         logger.warning(msg)
 
-    return {"success": success, "message": msg}
+    return {'success': success, 'message': msg}
