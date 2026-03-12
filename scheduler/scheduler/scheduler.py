@@ -28,7 +28,7 @@ logger = Logger()
 @validator(inbound_schema=schemas.INPUT, outbound_schema=schemas.OUTPUT)
 def handler(event, _context) -> Dict:
     resource_action = (event['resource_type'], event['action'])
-    params = event[f"{event['resource_type']}_params"]
+    params = event[f'{event["resource_type"]}_params']
 
     success, msg = (False, 'Unknown resource action')
     match resource_action:
