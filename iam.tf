@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "eventbridge_scheduler_policy" {
 
 module "eventbridge_scheduler_role" {
   source  = "schubergphilis/mcaf-role/aws"
-  version = "0.4.0"
+  version = "0.5.3"
 
   name                  = "composition-scheduler-event-bridge-role-${var.composition_name}-${data.aws_region.current.name}"
   create_policy         = true

@@ -134,23 +134,23 @@ This module is extendable. To add support for more resources, follow these gener
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
 | <a name="requirement_archive"></a> [archive](#requirement\_archive) | >= 2.4.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.10.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | >= 2.4.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.10.0 |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.7.1 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.36.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_api_gateway_role"></a> [api\_gateway\_role](#module\_api\_gateway\_role) | schubergphilis/mcaf-role/aws | 0.4.0 |
-| <a name="module_eventbridge_scheduler_role"></a> [eventbridge\_scheduler\_role](#module\_eventbridge\_scheduler\_role) | schubergphilis/mcaf-role/aws | 0.4.0 |
+| <a name="module_eventbridge_scheduler_role"></a> [eventbridge\_scheduler\_role](#module\_eventbridge\_scheduler\_role) | schubergphilis/mcaf-role/aws | 0.5.3 |
 | <a name="module_lambda_role"></a> [lambda\_role](#module\_lambda\_role) | schubergphilis/mcaf-role/aws | 0.4.0 |
-| <a name="module_scheduler_lambda"></a> [scheduler\_lambda](#module\_scheduler\_lambda) | schubergphilis/mcaf-lambda/aws | ~> 1.1.2 |
+| <a name="module_scheduler_lambda"></a> [scheduler\_lambda](#module\_scheduler\_lambda) | schubergphilis/mcaf-lambda/aws | ~> 3.0.0 |
 | <a name="module_step_functions_role"></a> [step\_functions\_role](#module\_step\_functions\_role) | schubergphilis/mcaf-role/aws | 0.4.0 |
 
 ## Resources
@@ -214,12 +214,12 @@ This module is extendable. To add support for more resources, follow these gener
 |------|-------------|------|---------|:--------:|
 | <a name="input_composition_name"></a> [composition\_name](#input\_composition\_name) | The name of the controlled composition | `string` | n/a | yes |
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The ARN of the KMS key to use with the Lambda function | `string` | n/a | yes |
-| <a name="input_resource_composition"></a> [resource\_composition](#input\_resource\_composition) | Resource composition | <pre>list(object({<br>    type   = string<br>    params = map(any)<br>  }))</pre> | n/a | yes |
+| <a name="input_resource_composition"></a> [resource\_composition](#input\_resource\_composition) | Resource composition | <pre>list(object({<br/>    type   = string<br/>    params = map(any)<br/>  }))</pre> | n/a | yes |
 | <a name="input_start_resources_at"></a> [start\_resources\_at](#input\_start\_resources\_at) | Resources start cron expression in selected timezone | `string` | n/a | yes |
 | <a name="input_stop_resources_at"></a> [stop\_resources\_at](#input\_stop\_resources\_at) | Resources stop cron expression in selected timezone | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Mapping of tags | `map(string)` | `{}` | no |
 | <a name="input_timezone"></a> [timezone](#input\_timezone) | Timezone to execute schedules in | `string` | `"UTC"` | no |
-| <a name="input_webhooks"></a> [webhooks](#input\_webhooks) | Deploy webhooks for external triggers from whitelisted IP CIDR's. | <pre>object({<br>    deploy       = bool<br>    ip_whitelist = list(string)<br>    private      = optional(bool, false)<br>  })</pre> | <pre>{<br>  "deploy": false,<br>  "ip_whitelist": [],<br>  "private": false<br>}</pre> | no |
+| <a name="input_webhooks"></a> [webhooks](#input\_webhooks) | Deploy webhooks for external triggers from whitelisted IP CIDR's. | <pre>object({<br/>    deploy       = bool<br/>    ip_whitelist = list(string)<br/>    private      = optional(bool, false)<br/>  })</pre> | <pre>{<br/>  "deploy": false,<br/>  "ip_whitelist": [],<br/>  "private": false<br/>}</pre> | no |
 
 ## Outputs
 
