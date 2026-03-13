@@ -140,8 +140,8 @@ This module is extendable. To add support for more resources, follow these gener
 
 | Name | Version |
 |------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.7.1 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.36.0 |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | >= 2.4.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.0.0 |
 
 ## Modules
 
@@ -214,10 +214,10 @@ This module is extendable. To add support for more resources, follow these gener
 |------|-------------|------|---------|:--------:|
 | <a name="input_composition_name"></a> [composition\_name](#input\_composition\_name) | The name of the controlled composition | `string` | n/a | yes |
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The ARN of the KMS key to use with the Lambda function | `string` | n/a | yes |
-| <a name="input_region"></a> [region](#input\_region) | The AWS region where resources will be created; if omitted the default provider region is used | `string` | `null` | no |
 | <a name="input_resource_composition"></a> [resource\_composition](#input\_resource\_composition) | Resource composition | <pre>list(object({<br/>    type   = string<br/>    params = map(any)<br/>  }))</pre> | n/a | yes |
 | <a name="input_start_resources_at"></a> [start\_resources\_at](#input\_start\_resources\_at) | Resources start cron expression in selected timezone | `string` | n/a | yes |
 | <a name="input_stop_resources_at"></a> [stop\_resources\_at](#input\_stop\_resources\_at) | Resources stop cron expression in selected timezone | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | The AWS region where resources will be created; if omitted the default provider region is used | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Mapping of tags | `map(string)` | `{}` | no |
 | <a name="input_timezone"></a> [timezone](#input\_timezone) | Timezone to execute schedules in | `string` | `"UTC"` | no |
 | <a name="input_webhooks"></a> [webhooks](#input\_webhooks) | Deploy webhooks for external triggers from whitelisted IP CIDR's. | <pre>object({<br/>    deploy       = bool<br/>    ip_whitelist = list(string)<br/>    private      = optional(bool, false)<br/>  })</pre> | <pre>{<br/>  "deploy": false,<br/>  "ip_whitelist": [],<br/>  "private": false<br/>}</pre> | no |
