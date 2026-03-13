@@ -1,6 +1,17 @@
+variable "composition_name" {
+  type        = string
+  description = "The name of the controlled composition"
+}
+
 variable "kms_key_arn" {
   description = "The ARN of the KMS key to use with the Lambda function"
   type        = string
+}
+
+variable "region" {
+  type        = string
+  default     = null
+  description = "The AWS region where resources will be created; if omitted the default provider region is used"
 }
 
 variable "resource_composition" {
@@ -61,25 +72,6 @@ variable "resource_composition" {
   }
 }
 
-variable "webhooks" {
-  type = object({
-    deploy       = bool
-    ip_whitelist = list(string)
-    private      = optional(bool, false)
-  })
-  default = {
-    deploy       = false
-    ip_whitelist = []
-    private      = false
-  }
-  description = "Deploy webhooks for external triggers from whitelisted IP CIDR's."
-}
-
-variable "composition_name" {
-  type        = string
-  description = "The name of the controlled composition"
-}
-
 variable "start_resources_at" {
   type        = string
   description = "Resources start cron expression in selected timezone"
@@ -110,4 +102,18 @@ variable "timezone" {
   type        = string
   description = "Timezone to execute schedules in"
   default     = "UTC"
+}
+
+variable "webhooks" {
+  type = object({
+    deploy       = bool
+    ip_whitelist = list(string)
+    private      = optional(bool, false)
+  })
+  default = {
+    deploy       = false
+    ip_whitelist = []
+    private      = false
+  }
+  description = "Deploy webhooks for external triggers from whitelisted IP CIDR's."
 }

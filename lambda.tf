@@ -14,6 +14,8 @@ module "scheduler_lambda" {
   source  = "schubergphilis/mcaf-lambda/aws"
   version = "~> 3.0.0"
 
+  region = var.region
+
   #checkov:skip=CKV_AWS_338:Ensure CloudWatch log groups retains logs for at least 1 year
   filename         = data.archive_file.scheduler_source.output_path
   source_code_hash = data.archive_file.scheduler_source.output_base64sha256
