@@ -176,7 +176,7 @@ resource "aws_api_gateway_integration" "webhook_start_composition" {
   http_method             = aws_api_gateway_method.webhook_start_composition[0].http_method
   integration_http_method = "POST"
   type                    = "AWS"
-  uri                     = "arn:aws:apigateway:${data.aws_region.current.region}:states:action/StartExecution"
+  uri                     = "arn:aws:apigateway:${local.account_region}:states:action/StartExecution"
   credentials             = module.api_gateway_role[0].arn
 
   request_templates = {
@@ -246,7 +246,7 @@ resource "aws_api_gateway_integration" "webhook_stop_composition" {
   http_method             = aws_api_gateway_method.webhook_stop_composition[0].http_method
   integration_http_method = "POST"
   type                    = "AWS"
-  uri                     = "arn:aws:apigateway:${data.aws_region.current.region}:states:action/StartExecution"
+  uri                     = "arn:aws:apigateway:${local.account_region}:states:action/StartExecution"
   credentials             = module.api_gateway_role[0].arn
 
   request_templates = {
