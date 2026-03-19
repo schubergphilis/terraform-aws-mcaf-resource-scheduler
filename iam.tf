@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "eventbridge_scheduler_policy" {
 
 module "eventbridge_scheduler_role" {
   source  = "schubergphilis/mcaf-role/aws"
-  version = "0.5.3"
+  version = "~> 0.5.3"
 
   name                  = "composition-scheduler-event-bridge-role-${var.composition_name}-${local.account_region}"
   create_policy         = true
@@ -213,7 +213,7 @@ data "aws_iam_policy_document" "lambda_policy" {
 
 module "lambda_role" {
   source  = "schubergphilis/mcaf-role/aws"
-  version = "0.4.0"
+  version = "~> 0.5.3"
 
   name                  = "composition-scheduler-lambda-role-${var.composition_name}-${local.account_region}"
   create_policy         = true
@@ -234,7 +234,7 @@ data "aws_iam_policy_document" "step_functions_policy" {
 
 module "step_functions_role" {
   source  = "schubergphilis/mcaf-role/aws"
-  version = "0.4.0"
+  version = "~> 0.5.3"
 
   name                  = "composition-scheduler-step-functions-role-${var.composition_name}-${local.account_region}"
   create_policy         = true
@@ -262,9 +262,10 @@ data "aws_iam_policy_document" "api_gateway_policy" {
 }
 
 module "api_gateway_role" {
-  count   = var.webhooks.deploy ? 1 : 0
+  count = var.webhooks.deploy ? 1 : 0
+
   source  = "schubergphilis/mcaf-role/aws"
-  version = "0.4.0"
+  version = "~> 0.5.3"
 
   name                  = "composition-scheduler-api-gateway-role-${var.composition_name}-${local.account_region}"
   create_policy         = true

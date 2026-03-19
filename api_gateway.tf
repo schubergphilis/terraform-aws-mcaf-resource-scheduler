@@ -1,7 +1,8 @@
 resource "aws_api_gateway_rest_api" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
-  name = "composition-scheduler-webhooks-${var.composition_name}"
+  region = var.region
+  name   = "composition-scheduler-webhooks-${var.composition_name}"
 
   endpoint_configuration {
     types = var.webhooks.private ? ["PRIVATE"] : ["REGIONAL"]
@@ -13,6 +14,7 @@ resource "aws_api_gateway_rest_api" "webhooks" {
 resource "aws_api_gateway_deployment" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region      = var.region
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
 
   depends_on = [
@@ -30,6 +32,7 @@ resource "aws_api_gateway_stage" "webhooks" {
   #checkov:skip=CKV2_AWS_51
   count = var.webhooks.deploy ? 1 : 0
 
+  region        = var.region
   deployment_id = aws_api_gateway_deployment.webhooks[0].id
   rest_api_id   = aws_api_gateway_rest_api.webhooks[0].id
   stage_name    = "default"
@@ -49,6 +52,7 @@ resource "aws_api_gateway_stage" "webhooks" {
 resource "aws_api_gateway_method_settings" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region      = var.region
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
   stage_name  = aws_api_gateway_stage.webhooks[0].stage_name
   method_path = "*/*"
@@ -62,6 +66,7 @@ resource "aws_api_gateway_method_settings" "webhooks" {
 resource "aws_cloudwatch_log_group" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region            = var.region
   name              = "API-Gateway-composition-scheduler-${var.composition_name}/default"
   kms_key_id        = var.kms_key_arn
   retention_in_days = 90
@@ -71,8 +76,9 @@ resource "aws_cloudwatch_log_group" "webhooks" {
 resource "aws_api_gateway_usage_plan" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
-  name = "composition-scheduler-webhooks-${var.composition_name}-usage-plan"
-  tags = var.tags
+  region = var.region
+  name   = "composition-scheduler-webhooks-${var.composition_name}-usage-plan"
+  tags   = var.tags
 
   api_stages {
     api_id = aws_api_gateway_rest_api.webhooks[0].id
@@ -83,13 +89,15 @@ resource "aws_api_gateway_usage_plan" "webhooks" {
 resource "aws_api_gateway_api_key" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
-  name = "composition-scheduler-webhooks-${var.composition_name}-api-key"
-  tags = var.tags
+  region = var.region
+  name   = "composition-scheduler-webhooks-${var.composition_name}-api-key"
+  tags   = var.tags
 }
 
 resource "aws_api_gateway_usage_plan_key" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region        = var.region
   key_id        = aws_api_gateway_api_key.webhooks[0].id
   key_type      = "API_KEY"
   usage_plan_id = aws_api_gateway_usage_plan.webhooks[0].id
@@ -98,6 +106,7 @@ resource "aws_api_gateway_usage_plan_key" "webhooks" {
 resource "aws_api_gateway_rest_api_policy" "webhooks" {
   count = var.webhooks.deploy && length(var.webhooks.ip_whitelist) > 0 ? 1 : 0
 
+  region      = var.region
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
   policy = jsonencode(
     {
@@ -126,10 +135,12 @@ resource "aws_api_gateway_rest_api_policy" "webhooks" {
 resource "aws_api_gateway_model" "webhooks" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region       = var.region
   rest_api_id  = aws_api_gateway_rest_api.webhooks[0].id
   name         = "StepFunctionExecutionResponseModel"
   description  = "API response for Step Function execution response"
   content_type = "application/json"
+
   schema = jsonencode({
     "$schema" = "http://json-schema.org/draft-04/schema#"
     title     = "StepFunctionExecutionResponse"
@@ -152,6 +163,7 @@ resource "aws_api_gateway_model" "webhooks" {
 resource "aws_api_gateway_resource" "webhook_start_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region      = var.region
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
   parent_id   = aws_api_gateway_rest_api.webhooks[0].root_resource_id
   path_part   = "start"
@@ -161,6 +173,7 @@ resource "aws_api_gateway_method" "webhook_start_composition" {
   #checkov:skip=CKV2_AWS_53:These webhooks take no parameters or request body to validate
   count = var.webhooks.deploy ? 1 : 0
 
+  region           = var.region
   rest_api_id      = aws_api_gateway_rest_api.webhooks[0].id
   resource_id      = aws_api_gateway_resource.webhook_start_composition[0].id
   http_method      = "POST"
@@ -171,6 +184,7 @@ resource "aws_api_gateway_method" "webhook_start_composition" {
 resource "aws_api_gateway_integration" "webhook_start_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region                  = var.region
   rest_api_id             = aws_api_gateway_rest_api.webhooks[0].id
   resource_id             = aws_api_gateway_resource.webhook_start_composition[0].id
   http_method             = aws_api_gateway_method.webhook_start_composition[0].http_method
@@ -192,6 +206,7 @@ EOF
 resource "aws_api_gateway_method_response" "webhook_start_composition_200" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region      = var.region
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
   resource_id = aws_api_gateway_resource.webhook_start_composition[0].id
   http_method = aws_api_gateway_method.webhook_start_composition[0].http_method
@@ -205,6 +220,7 @@ resource "aws_api_gateway_method_response" "webhook_start_composition_200" {
 resource "aws_api_gateway_integration_response" "webhook_start_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region      = var.region
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
   resource_id = aws_api_gateway_resource.webhook_start_composition[0].id
   http_method = aws_api_gateway_method.webhook_start_composition[0].http_method
@@ -222,6 +238,7 @@ resource "aws_api_gateway_integration_response" "webhook_start_composition" {
 resource "aws_api_gateway_resource" "webhook_stop_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region      = var.region
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
   parent_id   = aws_api_gateway_rest_api.webhooks[0].root_resource_id
   path_part   = "stop"
@@ -231,6 +248,7 @@ resource "aws_api_gateway_method" "webhook_stop_composition" {
   #checkov:skip=CKV2_AWS_53:These webhooks take no parameters or request body to validate
   count = var.webhooks.deploy ? 1 : 0
 
+  region           = var.region
   rest_api_id      = aws_api_gateway_rest_api.webhooks[0].id
   resource_id      = aws_api_gateway_resource.webhook_stop_composition[0].id
   http_method      = "POST"
@@ -241,6 +259,7 @@ resource "aws_api_gateway_method" "webhook_stop_composition" {
 resource "aws_api_gateway_integration" "webhook_stop_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region                  = var.region
   rest_api_id             = aws_api_gateway_rest_api.webhooks[0].id
   resource_id             = aws_api_gateway_resource.webhook_stop_composition[0].id
   http_method             = aws_api_gateway_method.webhook_stop_composition[0].http_method
@@ -262,6 +281,7 @@ EOF
 resource "aws_api_gateway_method_response" "webhook_stop_composition_200" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region      = var.region
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
   resource_id = aws_api_gateway_resource.webhook_stop_composition[0].id
   http_method = aws_api_gateway_method.webhook_stop_composition[0].http_method
@@ -275,6 +295,7 @@ resource "aws_api_gateway_method_response" "webhook_stop_composition_200" {
 resource "aws_api_gateway_integration_response" "webhook_stop_composition" {
   count = var.webhooks.deploy ? 1 : 0
 
+  region      = var.region
   rest_api_id = aws_api_gateway_rest_api.webhooks[0].id
   resource_id = aws_api_gateway_resource.webhook_stop_composition[0].id
   http_method = aws_api_gateway_method.webhook_stop_composition[0].http_method
