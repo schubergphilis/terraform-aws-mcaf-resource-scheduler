@@ -147,11 +147,11 @@ This module is extendable. To add support for more resources, follow these gener
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_api_gateway_role"></a> [api\_gateway\_role](#module\_api\_gateway\_role) | schubergphilis/mcaf-role/aws | 0.4.0 |
-| <a name="module_eventbridge_scheduler_role"></a> [eventbridge\_scheduler\_role](#module\_eventbridge\_scheduler\_role) | schubergphilis/mcaf-role/aws | 0.5.3 |
-| <a name="module_lambda_role"></a> [lambda\_role](#module\_lambda\_role) | schubergphilis/mcaf-role/aws | 0.4.0 |
+| <a name="module_api_gateway_role"></a> [api\_gateway\_role](#module\_api\_gateway\_role) | schubergphilis/mcaf-role/aws | ~> 0.5.3 |
+| <a name="module_eventbridge_scheduler_role"></a> [eventbridge\_scheduler\_role](#module\_eventbridge\_scheduler\_role) | schubergphilis/mcaf-role/aws | ~> 0.5.3 |
+| <a name="module_lambda_role"></a> [lambda\_role](#module\_lambda\_role) | schubergphilis/mcaf-role/aws | ~> 0.5.3 |
 | <a name="module_scheduler_lambda"></a> [scheduler\_lambda](#module\_scheduler\_lambda) | schubergphilis/mcaf-lambda/aws | ~> 3.0.0 |
-| <a name="module_step_functions_role"></a> [step\_functions\_role](#module\_step\_functions\_role) | schubergphilis/mcaf-role/aws | 0.4.0 |
+| <a name="module_step_functions_role"></a> [step\_functions\_role](#module\_step\_functions\_role) | schubergphilis/mcaf-role/aws | ~> 0.5.3 |
 
 ## Resources
 
