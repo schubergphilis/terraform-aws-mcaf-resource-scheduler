@@ -47,18 +47,23 @@ locals {
 }
 
 data "aws_rds_cluster" "managed" {
-  for_each           = toset([for resource in var.resource_composition : resource.params["id"] if resource.type == "rds_cluster"])
+  for_each = toset([for resource in var.resource_composition : resource.params["id"] if resource.type == "rds_cluster"])
+
+  region             = var.region
   cluster_identifier = each.key
 }
 
 data "aws_db_instance" "managed" {
-  for_each               = toset([for resource in var.resource_composition : resource.params["id"] if resource.type == "rds_instance"])
+  for_each = toset([for resource in var.resource_composition : resource.params["id"] if resource.type == "rds_instance"])
+
+  region                 = var.region
   db_instance_identifier = each.key
 }
 
 data "aws_lambda_invocation" "rds_cluster_maintenance_windows" {
   for_each = local.rds_cluster_maintenance_windows
 
+  region        = var.region
   function_name = module.scheduler_lambda.name
 
   input = jsonencode({
@@ -79,6 +84,7 @@ data "aws_lambda_invocation" "rds_cluster_maintenance_windows" {
 data "aws_lambda_invocation" "rds_cluster_backup_windows" {
   for_each = local.rds_cluster_backup_windows
 
+  region        = var.region
   function_name = module.scheduler_lambda.name
 
   input = jsonencode({
@@ -99,6 +105,7 @@ data "aws_lambda_invocation" "rds_cluster_backup_windows" {
 data "aws_lambda_invocation" "rds_instance_maintenance_windows" {
   for_each = local.rds_instance_maintenance_windows
 
+  region        = var.region
   function_name = module.scheduler_lambda.name
 
   input = jsonencode({
@@ -119,6 +126,7 @@ data "aws_lambda_invocation" "rds_instance_maintenance_windows" {
 data "aws_lambda_invocation" "rds_instance_backup_windows" {
   for_each = local.rds_instance_backup_windows
 
+  region        = var.region
   function_name = module.scheduler_lambda.name
 
   input = jsonencode({

@@ -17,9 +17,9 @@ data "aws_iam_policy_document" "eventbridge_scheduler_policy" {
 
 module "eventbridge_scheduler_role" {
   source  = "schubergphilis/mcaf-role/aws"
-  version = "0.4.0"
+  version = "~> 0.5.3"
 
-  name                  = "composition-scheduler-event-bridge-role-${var.composition_name}-${data.aws_region.current.name}"
+  name                  = "composition-scheduler-event-bridge-role-${var.composition_name}-${local.account_region}"
   create_policy         = true
   postfix               = false
   principal_type        = "Service"
@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "lambda_policy" {
   statement {
     effect    = "Allow"
     actions   = ["logs:CreateLogGroup"]
-    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:*"]
+    resources = ["arn:aws:logs:${local.account_region}:${data.aws_caller_identity.current.id}:*"]
   }
 
   statement {
@@ -41,13 +41,13 @@ data "aws_iam_policy_document" "lambda_policy" {
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ]
-    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:log-group:/aws/lambda/*:*"]
+    resources = ["arn:aws:logs:${local.account_region}:${data.aws_caller_identity.current.id}:log-group:/aws/lambda/*:*"]
   }
 
   statement {
     effect    = "Allow"
     actions   = ["kms:ListAliases"]
-    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:*"]
+    resources = ["arn:aws:kms:${local.account_region}:${data.aws_caller_identity.current.id}:*"]
   }
 
   statement {
@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "lambda_policy" {
       actions = ["ecs:UpdateService"]
       resources = [
         for resource in var.resource_composition :
-        "arn:aws:ecs:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:service/${resource.params["cluster_name"]}/${resource.params["name"]}"
+        "arn:aws:ecs:${local.account_region}:${data.aws_caller_identity.current.id}:service/${resource.params["cluster_name"]}/${resource.params["name"]}"
         if resource.type == "ecs_service"
       ]
     }
@@ -87,7 +87,7 @@ data "aws_iam_policy_document" "lambda_policy" {
       ]
       resources = [
         for resource in var.resource_composition :
-        "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:instance/${resource.params["id"]}"
+        "arn:aws:ec2:${local.account_region}:${data.aws_caller_identity.current.id}:instance/${resource.params["id"]}"
         if resource.type == "ec2_instance"
       ]
     }
@@ -101,7 +101,7 @@ data "aws_iam_policy_document" "lambda_policy" {
       actions = ["autoscaling:UpdateAutoScalingGroup"]
       resources = [
         for resource in var.resource_composition :
-        "arn:aws:autoscaling:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:autoScalingGroup:*:autoScalingGroupName/${resource.params["name"]}"
+        "arn:aws:autoscaling:${local.account_region}:${data.aws_caller_identity.current.id}:autoScalingGroup:*:autoScalingGroupName/${resource.params["name"]}"
         if resource.type == "auto_scaling_group"
       ]
     }
@@ -137,7 +137,7 @@ data "aws_iam_policy_document" "lambda_policy" {
       ]
       resources = [
         for resource in var.resource_composition :
-        "arn:aws:redshift:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:cluster:${resource.params["id"]}"
+        "arn:aws:redshift:${local.account_region}:${data.aws_caller_identity.current.id}:cluster:${resource.params["id"]}"
         if resource.type == "redshift_cluster"
       ]
     }
@@ -154,7 +154,7 @@ data "aws_iam_policy_document" "lambda_policy" {
       ]
       resources = [
         for resource in var.resource_composition :
-        "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:cluster:${resource.params["id"]}"
+        "arn:aws:rds:${local.account_region}:${data.aws_caller_identity.current.id}:cluster:${resource.params["id"]}"
         if resource.type == "rds_cluster"
       ]
     }
@@ -171,7 +171,7 @@ data "aws_iam_policy_document" "lambda_policy" {
       ]
       resources = [
         for resource in var.resource_composition :
-        "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:db:${resource.params["id"]}"
+        "arn:aws:rds:${local.account_region}:${data.aws_caller_identity.current.id}:db:${resource.params["id"]}"
         if resource.type == "rds_instance"
       ]
     }
@@ -187,7 +187,7 @@ data "aws_iam_policy_document" "lambda_policy" {
       ]
       resources = [
         for resource in var.resource_composition :
-        "arn:aws:fsx:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:file-system/${resource.params["id"]}"
+        "arn:aws:fsx:${local.account_region}:${data.aws_caller_identity.current.id}:file-system/${resource.params["id"]}"
         if resource.type == "fsx_windows_file_system"
       ]
     }
@@ -204,7 +204,7 @@ data "aws_iam_policy_document" "lambda_policy" {
       ]
       resources = [
         for resource in var.resource_composition :
-        "arn:aws:elasticfilesystem:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:file-system/${resource.params["id"]}"
+        "arn:aws:elasticfilesystem:${local.account_region}:${data.aws_caller_identity.current.id}:file-system/${resource.params["id"]}"
         if resource.type == "efs_file_system"
       ]
     }
@@ -213,9 +213,9 @@ data "aws_iam_policy_document" "lambda_policy" {
 
 module "lambda_role" {
   source  = "schubergphilis/mcaf-role/aws"
-  version = "0.4.0"
+  version = "~> 0.5.3"
 
-  name                  = "composition-scheduler-lambda-role-${var.composition_name}-${data.aws_region.current.name}"
+  name                  = "composition-scheduler-lambda-role-${var.composition_name}-${local.account_region}"
   create_policy         = true
   postfix               = false
   principal_type        = "Service"
@@ -234,9 +234,9 @@ data "aws_iam_policy_document" "step_functions_policy" {
 
 module "step_functions_role" {
   source  = "schubergphilis/mcaf-role/aws"
-  version = "0.4.0"
+  version = "~> 0.5.3"
 
-  name                  = "composition-scheduler-step-functions-role-${var.composition_name}-${data.aws_region.current.name}"
+  name                  = "composition-scheduler-step-functions-role-${var.composition_name}-${local.account_region}"
   create_policy         = true
   postfix               = false
   principal_type        = "Service"
@@ -262,11 +262,12 @@ data "aws_iam_policy_document" "api_gateway_policy" {
 }
 
 module "api_gateway_role" {
-  count   = var.webhooks.deploy ? 1 : 0
-  source  = "schubergphilis/mcaf-role/aws"
-  version = "0.4.0"
+  count = var.webhooks.deploy ? 1 : 0
 
-  name                  = "composition-scheduler-api-gateway-role-${var.composition_name}-${data.aws_region.current.name}"
+  source  = "schubergphilis/mcaf-role/aws"
+  version = "~> 0.5.3"
+
+  name                  = "composition-scheduler-api-gateway-role-${var.composition_name}-${local.account_region}"
   create_policy         = true
   postfix               = false
   principal_type        = "Service"

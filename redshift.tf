@@ -17,13 +17,16 @@ locals {
 }
 
 data "aws_redshift_cluster" "managed" {
-  for_each           = toset([for resource in var.resource_composition : resource.params["id"] if resource.type == "redshift_cluster"])
+  for_each = toset([for resource in var.resource_composition : resource.params["id"] if resource.type == "redshift_cluster"])
+
+  region             = var.region
   cluster_identifier = each.key
 }
 
 data "aws_lambda_invocation" "redshift_cluster_maintenance_windows" {
   for_each = local.redshift_cluster_maintenance_windows
 
+  region        = var.region
   function_name = module.scheduler_lambda.name
 
   input = jsonencode({

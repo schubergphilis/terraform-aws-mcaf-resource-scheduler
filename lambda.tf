@@ -12,22 +12,22 @@ data "archive_file" "scheduler_source" {
 
 module "scheduler_lambda" {
   source  = "schubergphilis/mcaf-lambda/aws"
-  version = "~> 1.1.2"
+  version = "~> 3.0.0"
+
+  region = var.region
 
   #checkov:skip=CKV_AWS_338:Ensure CloudWatch log groups retains logs for at least 1 year
   filename         = data.archive_file.scheduler_source.output_path
   source_code_hash = data.archive_file.scheduler_source.output_base64sha256
 
   name          = "resource-scheduler-${var.composition_name}"
-  create_policy = false
   description   = "Resource Scheduler Lambda Function"
   handler       = "scheduler.scheduler.handler"
   kms_key_arn   = var.kms_key_arn
   log_retention = 90
   memory_size   = 256
   retries       = 0
-  role_arn      = module.lambda_role.arn
-  runtime       = "python3.11"
+  runtime       = "python3.13"
   timeout       = 60
 
   environment = {
@@ -35,10 +35,14 @@ module "scheduler_lambda" {
     POWERTOOLS_SERVICE_NAME = "composition-scheduler-${var.composition_name}"
   }
 
+  execution_role_custom = {
+    arn = module.lambda_role.arn
+  }
+
   # Use a AWS provided layer to include Powertools to simplify redistribution.
   # Also see https://docs.powertools.aws.dev/lambda/python/latest/#lambda-layer.
   layers = [
-    "arn:aws:lambda:${data.aws_region.current.name}:017000801446:layer:AWSLambdaPowertoolsPythonV2:79"
+    "arn:aws:lambda:${local.account_region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:27"
   ]
 
   tags = var.tags

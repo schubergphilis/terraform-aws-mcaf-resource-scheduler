@@ -40,13 +40,10 @@ locals {
   stop_composition_states = merge(local.stop_composition_states_resources, local.composition_state_done)
 }
 
-data "aws_caller_identity" "current" {}
-
-data "aws_region" "current" {}
-
 resource "aws_sfn_state_machine" "composition_start" {
   #checkov:skip=CKV_AWS_284
   #checkov:skip=CKV_AWS_285:Logging is only valid for express workflows
+  region   = var.region
   name     = "composition-scheduler-start-${var.composition_name}"
   role_arn = module.step_functions_role.arn
   tags     = var.tags
@@ -60,6 +57,7 @@ resource "aws_sfn_state_machine" "composition_start" {
 resource "aws_sfn_state_machine" "composition_stop" {
   #checkov:skip=CKV_AWS_284
   #checkov:skip=CKV_AWS_285:Logging is only valid for express workflows
+  region   = var.region
   name     = "composition-scheduler-stop-${var.composition_name}"
   role_arn = module.step_functions_role.arn
   tags     = var.tags
