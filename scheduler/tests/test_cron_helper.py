@@ -26,7 +26,7 @@ def test_skips_window_full_if_within_operational_hours():
     out = extend_windows('Thu:10:00-Thu:11:00', 15, '0 9 ? * * *', '0 18 ? * * *', 'Europe/Amsterdam')
     assert out == ('45 9 ? * THU *', '15 11 ? * THU *', True, True)
 
- def test_skips_bracketing_when_operational_window_wraps_midnight():
+def test_skips_bracketing_when_operational_window_wraps_midnight():
     # Up 00:30-19:00 Europe/Amsterdam => 22:30-17:00 UTC (wraps midnight).
     # A 06:00-08:00 UTC backup window is fully inside operational hours,
     # so both start and stop brackets must be skipped.
