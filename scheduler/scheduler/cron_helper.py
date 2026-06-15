@@ -73,10 +73,15 @@ def extend_windows(
         date_composition_start_comp = int(date_composition_start.strftime('%H%M'))
         date_composition_stop_comp = int(date_composition_stop.strftime('%H%M'))
 
-        if extended_start_comp >= date_composition_start_comp and extended_start_comp < date_composition_stop_comp:
-            skip_start = True
+        def _within_operational_hours(value: int) -> bool:
+            # Operational window may wrap past midnight (e.g. 22:30->17:00 UTC when the
+            # schedule is defined in a +1/+2 timezone). A plain start <= value < stop
+            # test fails for that case, so handle the wrap explicitly.
+            if date_composition_start_comp <= date_composition_stop_comp:
+                return date_composition_start_comp <= value < date_composition_stop_comp
+            return value >= date_composition_start_comp or value < date_composition_stop_comp
 
-        if extended_stop_comp < date_composition_stop_comp and extended_stop_comp >= date_composition_start_comp:
-            skip_stop = True
+        skip_start = _within_operational_hours(extended_start_comp)
+        skip_stop = _within_operational_hours(extended_stop_comp)
 
     return (extended_start_cron, extended_stop_cron, skip_start, skip_stop)
