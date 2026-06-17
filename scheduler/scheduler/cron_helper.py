@@ -32,8 +32,13 @@ def extend_windows(
     start_resources_at: str,
     stop_resources_at: str,
     timezone: str,
+    now: datetime | None = None,
 ) -> Tuple[str, str, bool, bool]:
-    now = datetime.now(UTC)
+    # `now` is injectable so callers (and tests) can pin the reference instant.
+    # This matters because converting operational hours from a DST-aware timezone
+    # to UTC depends on whether the reference date falls in summer or winter time.
+    if now is None:
+        now = datetime.now(UTC)
 
     cron_expressions = window_expression_to_cron_expressions(aws_window_expression)
     cron_start = AWSCron(cron_expressions[0])
